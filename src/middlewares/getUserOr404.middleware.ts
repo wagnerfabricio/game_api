@@ -10,7 +10,7 @@ const getUserOr404 = async (
 ) => {
   const { id } = req.params;
 
-  const user: User = await userRepository.retrieve({ id: id });
+  const user: User = await userRepository.retrieve({ id });
 
   if (!user) {
     throw new AppError(404, "User not found");
