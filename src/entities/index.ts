@@ -1,1 +1,3 @@
-//index.ts
+import { User } from "./user.entity";
+
+export { User };
