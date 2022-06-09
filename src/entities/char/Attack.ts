@@ -19,7 +19,7 @@ export class Attack {
   damage: number;
 
   @Column({ type: "float", default: 0 })
-  ressource?: number;
+  resource?: number;
 
   @ManyToMany(() => Category, (category) => category.attacks)
   categories: Category[];

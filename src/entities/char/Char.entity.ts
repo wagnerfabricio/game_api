@@ -24,10 +24,10 @@ export class Char {
   currentLife: number;
 
   @Column({ type: "float" })
-  ressource: number;
+  resource: number;
 
   @Column({ type: "float", name: "current_ressource" })
-  currentRessource: number;
+  currentResource: number;
 
   @Column({ type: "float" })
   defence: number;
