@@ -1,25 +1,12 @@
 import { Request, Response } from "express";
 import dataSource from "../data-source";
 import { Attack, Category, Char } from "../entities";
+import { charRepository } from "../repositories";
 
 class CharService {
-  newChar = async (req: Request, res: Response) => {
-    const { name, life, currentLife, resource, currentResource, defense } =
-      req.body;
-
-    const char = new Char();
-
-    char.name = name;
-    char.life = life;
-    char.currentLife = currentLife;
-    char.resource = resource;
-    char.currentResource = currentResource;
-    char.defense = defense;
-
-    dataSource
-      .getRepository(Char)
-      .save(char)
-      .then((response) => res.status(201).json(response));
+  create = async ({ validated }: Request): Promise<Partial<Char>> => {
+    const char = await charRepository.save(validated as Char);
+    return char;
   };
 
   getAll = async (req: Request, res: Response) => {
@@ -29,7 +16,7 @@ class CharService {
       .then((response) => res.status(200).json(response));
   };
 
-  getById = async (req: Request, res: Response) => {
+  retrieve = async (req: Request, res: Response) => {
     const { id } = req.params;
     const char = await dataSource.getRepository(Char).findOneBy({ id });
 

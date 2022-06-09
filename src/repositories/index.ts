@@ -1,1 +1,3 @@
-//index.ts
+import charRepository from "./char.repository";
+
+export { charRepository };
