@@ -20,8 +20,7 @@ export class Category {
   @OneToMany(() => Char, (char) => char.category)
   chars: Char[];
 
-
-  @ManyToMany(() => Attack, { eager: true })
+  @ManyToMany(() => Attack, attacks => attacks.categories, { eager: true, cascade: true })
   @JoinTable()
   attacks: Attack[];
 }

@@ -33,8 +33,11 @@ export class Char {
   defence: number;
 
   @Column({ type: "float", default: 1 })
-  level: number;
+  level?: number;
 
-  @ManyToOne(() => Category, { eager: true, cascade: true })
+  @ManyToOne(() => Category, (category) => category.chars, {
+    eager: true,
+    cascade: true,
+  })
   category: Category;
 }

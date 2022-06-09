@@ -5,6 +5,7 @@ import {
   ManyToMany,
   JoinTable,
 } from "typeorm";
+import { Category } from "./";
 
 @Entity("attacks")
 export class Attack {
@@ -19,4 +20,7 @@ export class Attack {
 
   @Column({ type: "float", default: 0 })
   ressource?: number;
+
+  @ManyToMany(() => Category, (category) => category.attacks)
+  categories: Category[];
 }
