@@ -4,7 +4,7 @@ import userRoute from "./user.route";
 
 const appRoutes = (app: Express) => {
   app.use("/api/hello", helloRoutes);
-  app.use("/user", userRoute);
+  app.use("/users", userRoute);
 };
 
 export default appRoutes;

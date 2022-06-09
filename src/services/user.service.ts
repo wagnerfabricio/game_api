@@ -14,6 +14,12 @@ class userService {
 
     return user;
   };
+
+  getAllUsersService = async () => {
+    const users: User[] = await userRepository.getAll();
+
+    return users;
+  };
 }
 
 export default new userService();
