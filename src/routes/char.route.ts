@@ -1,11 +1,12 @@
 import { Router } from "express";
-import { attackService, categoryService, charService } from "../services";
+import { attackService, categoryService } from "../services";
+import { charController } from "../controllers";
 
 const charRoutes = Router();
 
-charRoutes.post("/admin", charService.newChar);
-charRoutes.get("", charService.getAll);
-charRoutes.patch("/admin/:id", charService.update);
+charRoutes.post("/admin", charController.create);
+charRoutes.get("", charController.getAll);
+charRoutes.patch("/admin/:id", charController.update);
 charRoutes.post("/admin/attack", attackService.addAttack);
 charRoutes.get("/attack", attackService.getAttacks);
 charRoutes.post("/admin/category", categoryService.addCategory);
@@ -15,6 +16,5 @@ charRoutes.patch(
   attackService.addAttackToCategory
 );
 charRoutes.post("/categories/attack", categoryService.getCategoryByAttack);
-charRoutes.post("/admin/create_full_char", charService.createFullChar);
 
 export default charRoutes;
