@@ -1,11 +1,12 @@
 import express from "express";
-import { User } from "../entities";
+import { User, Char, Attack, Category } from "../entities";
 
 declare global {
   namespace Express {
     interface Request {
+      validated: User | Char | Attack | Category;
+      char: Char;
       user: User;
-      validated: User;
       decoded: User;
     }
   }

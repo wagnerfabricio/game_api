@@ -1,58 +1,29 @@
 import { Request, Response } from "express";
 import dataSource from "../data-source";
 import { Attack, Category, Char } from "../entities";
+import { charRepository } from "../repositories";
 
 class CharService {
-  newChar = async (req: Request, res: Response) => {
-    const { name, life, currentLife, resource, currentResource, defense } =
-      req.body;
-
-    const char = new Char();
-
-    char.name = name;
-    char.life = life;
-    char.currentLife = currentLife;
-    char.resource = resource;
-    char.currentResource = currentResource;
-    char.defense = defense;
-
-    dataSource
-      .getRepository(Char)
-      .save(char)
-      .then((response) => res.status(201).json(response));
+  create = async ({ validated }: Request): Promise<Char> => {
+    const char = await charRepository.save(validated as Char);
+    return char;
   };
 
-  getAll = async (req: Request, res: Response) => {
-    return dataSource
-      .getRepository(Char)
-      .find()
-      .then((response) => res.status(200).json(response));
+  getAll = async (): Promise<Char[]> => {
+    const chars = await charRepository.getAll();
+    return chars;
   };
 
-  getById = async (req: Request, res: Response) => {
-    const { id } = req.params;
-    const char = await dataSource.getRepository(Char).findOneBy({ id });
-
-    return res.status(200).json(char);
+  retrieve = async ({ char }: Request): Promise<Char> => {
+    const foundChar = await charRepository.retrieve(char);
+    return foundChar;
   };
 
-  update = async (req: Request, res: Response) => {
-    const repository = dataSource.getRepository(Char);
-
-    const { id } = req.params;
-    const { name, life, currentLife, resource, currentResource, defense } =
-      req.body;
-
-    const char = await repository.findOneByOrFail({ id });
-
-    char.name = name;
-    char.life = life;
-    char.currentLife = currentLife;
-    char.resource = resource;
-    char.currentResource = currentResource;
-    char.defense = defense;
-
-    repository.save(char).then((response) => res.status(201).json(response));
+  update = async ({ char, validated }: Request) => {
+    const updatedChar = await charRepository.update(char.id, {
+      ...(validated as Char),
+    });
+    return updatedChar;
   };
 
   createFullChar = async (req: Request, res: Response) => {

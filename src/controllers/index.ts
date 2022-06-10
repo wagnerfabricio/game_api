@@ -1,3 +1,4 @@
 import userController from "./user.controller";
+import charController from "./char.controller";
 
-export { userController };
+export { userController, charController };
