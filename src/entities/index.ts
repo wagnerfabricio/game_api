@@ -1,3 +1,4 @@
+import { User } from "./user/user.entity";
 import { Char, Category, Attack } from "./char";
 
-export { Char, Category, Attack };
+export { User, Char, Category, Attack };

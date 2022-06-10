@@ -1,0 +1,15 @@
+import { hashSync } from "bcrypt";
+
+import dotenv from "dotenv";
+
+dotenv.config();
+
+
+await queryRunner.query(
+      `INSERT INTO "userEntity" ("username", "email", "password", "active", "adm") VALUES ('${
+        process.env.ADMIN_USERNAME
+      }', '${process.env.ADMIN_EMAIL}', '${hashSync(
+        process.env.ADMIN_PASSWORD,
+        10
+      )}', true, true )`
+    );
