@@ -1,8 +1,4 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-} from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
 @Entity("attacks")
 export class Attack {
@@ -18,8 +14,8 @@ export class Attack {
   @Column()
   accuracy: number;
 
-  @Column()
-  hits: number;
+  @Column({ default: 1 })
+  hits?: number;
 
   @Column()
   type: string;

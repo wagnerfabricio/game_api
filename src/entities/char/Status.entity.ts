@@ -5,7 +5,7 @@ export class Status {
   @PrimaryGeneratedColumn("uuid")
   id?: string;
 
-  @Column()
+  @Column({default: 15})
   level: number;
 
   @Column()
@@ -21,7 +21,7 @@ export class Status {
   magic: number;
 
   @Column()
-  defence: number;
+  defense: number;
 
   @Column()
   hp: number;

@@ -18,13 +18,13 @@ export class Char {
   @Column({ unique: true })
   name: string;
 
-  @Column()
+  @Column({ nullable: true })
   token: string;
 
   @OneToOne(() => Status, {
     nullable: false,
-    eager: true,
     cascade: true,
+    eager: true,
   })
   @JoinColumn()
   status: Status;
@@ -37,8 +37,9 @@ export class Char {
   attacks: Attack[];
 
   @ManyToOne(() => Sprite, {
-    eager: true,
+    nullable: false,
     cascade: true,
+    eager: true,
   })
   @JoinColumn()
   sprite: Sprite;
