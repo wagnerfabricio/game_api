@@ -1,16 +1,18 @@
 import { Request, Response } from "express";
 import dataSource from "../data-source";
-import { Attack, Category } from "../entities";
+import { Attack } from "../entities";
 
 class AttackService {
   addAttack = async (req: Request, res: Response) => {
-    const { name, damage, resource } = req.body;
+    const { name, power, accuracy, hits, type } = req.body;
 
     const attack = new Attack();
 
     attack.name = name;
-    attack.damage = damage;
-    attack.resource = resource;
+    attack.power = power;
+    attack.accuracy = accuracy;
+    attack.hits = hits;
+    attack.type = type;
 
     dataSource
       .getRepository(Attack)
@@ -23,26 +25,6 @@ class AttackService {
       .getRepository(Attack)
       .find()
       .then((response) => res.status(200).json(response));
-  };
-
-  addAttackToCategory = async (req: Request, res: Response) => {
-    const { attackId } = req.body;
-    const { categoryId } = req.params;
-
-    const category = await dataSource
-      .getRepository(Category)
-      .findOneByOrFail({ id: categoryId });
-
-    const attack = await dataSource
-      .getRepository(Attack)
-      .findOneByOrFail({ id: attackId });
-
-    category.attacks.push(attack);
-
-    dataSource
-      .getRepository(Category)
-      .save(category)
-      .then((response) => res.status(201).json(response));
   };
 }
 

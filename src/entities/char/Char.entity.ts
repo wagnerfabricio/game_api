@@ -5,9 +5,10 @@ import {
   ManyToMany,
   JoinTable,
   OneToOne,
+  JoinColumn,
   ManyToOne,
 } from "typeorm";
-import { Category } from "./";
+import { Attack, Status, Sprite } from "./";
 
 @Entity("chars")
 export class Char {
@@ -17,27 +18,29 @@ export class Char {
   @Column({ unique: true })
   name: string;
 
-  @Column({ type: "float" })
-  life: number;
+  @Column({ nullable: true })
+  token: string;
 
-  @Column({ type: "float", name: "current_life" })
-  currentLife: number;
+  @OneToOne(() => Status, {
+    nullable: false,
+    cascade: true,
+    eager: true,
+  })
+  @JoinColumn()
+  status: Status;
 
-  @Column({ type: "float" })
-  resource: number;
-
-  @Column({ type: "float", name: "current_ressource" })
-  currentResource: number;
-
-  @Column({ type: "float" })
-  defense: number;
-
-  @Column({ type: "float", default: 1 })
-  level?: number;
-
-  @ManyToOne(() => Category, (category) => category.chars, {
+  @ManyToMany(() => Attack, {
     eager: true,
     cascade: true,
   })
-  category: Category;
+  @JoinTable()
+  attacks: Attack[];
+
+  @ManyToOne(() => Sprite, {
+    nullable: false,
+    cascade: true,
+    eager: true,
+  })
+  @JoinColumn()
+  sprite: Sprite;
 }

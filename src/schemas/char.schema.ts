@@ -1,6 +1,3 @@
-import { Category } from "../entities";
-import categorySchema from "./category.schema";
-
 class CharSchema {
   char = {
     type: "object",
@@ -13,7 +10,6 @@ class CharSchema {
       currentResource: { type: "integer" },
       defence: { type: "integer" },
       level: { type: "integer" },
-      category: { type: categorySchema.category },
     },
   };
 
@@ -28,7 +24,6 @@ class CharSchema {
       currentResource: { type: "integer" },
       defence: { type: "integer" },
       level: { type: "integer" },
-      //   category: { type: Category },
     },
     required: [
       "name",

@@ -1,4 +1,4 @@
 import { User } from "./user/user.entity";
-import { Char, Category, Attack } from "./char";
+import { Char, Attack, Status, Sprite } from "./char";
 
-export { User, Char, Category, Attack };
+export { User, Char, Attack, Status, Sprite };
