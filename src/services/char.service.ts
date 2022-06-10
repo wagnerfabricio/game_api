@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import dataSource from "../data-source";
-import { Attack, Category, Char } from "../entities";
+import { Attack, Char } from "../entities";
+import { Sprite, Status } from "../entities/char";
 import { charRepository } from "../repositories";
 
 class CharService {
@@ -26,45 +27,52 @@ class CharService {
     return updatedChar;
   };
 
-  createFullChar = async (req: Request, res: Response) => {
+  createFullChar = async (req: Request) => {
     const {
       name,
-      life,
-      currentLife,
-      resource,
-      currentResource,
+      vigor,
+      strength,
+      agility,
+      magic,
       defense,
-      category,
+      hp,
+      points,
+      spriteId,
     } = req.body;
 
     const newChar = new Char();
 
     newChar.name = name;
-    newChar.life = life;
-    newChar.currentLife = currentLife;
-    newChar.resource = resource;
-    newChar.currentResource = currentResource;
-    newChar.defense = defense;
 
-    const attacks = category.attacks.map((attack) => {
-      const newAttack = new Attack();
-      newAttack.name = attack.name;
-      newAttack.damage = attack.damage;
-      newAttack.resource = attack.resource;
-      return newAttack;
-    });
+    const newStatus = new Status();
+    newStatus.vigor = vigor;
+    newStatus.strength = strength;
+    newStatus.agility = agility;
+    newStatus.magic = magic;
+    newStatus.defense = defense;
+    newStatus.hp = hp;
+    newStatus.points = points;
 
-    const newCategory = new Category();
-    newCategory.name = category.name;
+    newChar.status = newStatus;
 
-    newCategory.attacks = attacks;
+    const charSprite = await dataSource
+      .getRepository(Sprite)
+      .findOneByOrFail({ id: spriteId });
 
-    newChar.category = newCategory;
+    newChar.sprite = charSprite;
 
-    dataSource
-      .getRepository(Char)
-      .save(newChar)
-      .then((response) => res.status(201).json(response));
+    const attackList = await dataSource
+      .getRepository(Attack)
+      .createQueryBuilder()
+      .orderBy("RANDOM()")
+      .limit(3)
+      .getMany();
+
+    newChar.attacks = attackList;
+
+    await charRepository.save(newChar);
+
+    return newChar;
   };
 }
 

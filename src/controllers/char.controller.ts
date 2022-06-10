@@ -3,7 +3,7 @@ import { charService } from "../services";
 
 class CharController {
   create = async (req: Request, res: Response): Promise<Response> => {
-    const newChar = await charService.create(req);
+    const newChar = await charService.createFullChar(req);
     return res.status(201).json(newChar);
   };
 
