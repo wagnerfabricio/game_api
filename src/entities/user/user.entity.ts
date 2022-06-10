@@ -26,11 +26,14 @@ export class User {
   @Column({ default: true })
   active: boolean;
 
-  //   @OneToOne(() => Char, (char) => char, { eager: true })
-  //   @JoinColumn()
-  //   char: char;
+  @Column({ default: false })
+  adm: boolean;
 
-  //   comparePwd = async (pwd: string): Promise<boolean> => {
-  //     return await compare(pwd, this.password);
-  //   };
+  // @OneToOne(() => Char, (char) => char, { eager: true })
+  // @JoinColumn()
+  // char: char;
+
+  comparePwd = async (pwd: string): Promise<boolean> => {
+    return await compare(pwd, this.password);
+  };
 }
