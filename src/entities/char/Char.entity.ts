@@ -30,7 +30,7 @@ export class Char {
   currentResource: number;
 
   @Column({ type: "float" })
-  defence: number;
+  defense: number;
 
   @Column({ type: "float", default: 1 })
   level?: number;
