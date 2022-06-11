@@ -6,6 +6,7 @@ declare global {
       validated: User | Char | Attack | Sprite | Status;
       char: Char;
       user: User;
+      status: Status;
       decoded: User;
     }
   }
