@@ -1,30 +1,16 @@
-import { Request, Response } from "express";
-import dataSource from "../data-source";
+import { Request } from "express";
 import { Attack } from "../entities";
+import { attackRepository } from "../repositories";
 
 class AttackService {
-  addAttack = async (req: Request, res: Response) => {
-    const { name, power, accuracy, hits, type } = req.body;
+  create = async ({ validated }: Request): Promise<Attack> => {
+    const attack = await attackRepository.save(validated as Attack);
 
-    const attack = new Attack();
-
-    attack.name = name;
-    attack.power = power;
-    attack.accuracy = accuracy;
-    attack.hits = hits;
-    attack.type = type;
-
-    dataSource
-      .getRepository(Attack)
-      .save(attack)
-      .then((response) => res.status(201).json(response));
+    return attack;
   };
 
-  getAttacks = async (req: Request, res: Response) => {
-    return dataSource
-      .getRepository(Attack)
-      .find()
-      .then((response) => res.status(200).json(response));
+  getAll = async (): Promise<Attack[]> => {
+    return await attackRepository.getAll();
   };
 }
 

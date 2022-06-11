@@ -1,27 +1,16 @@
-import { Request, Response } from "express";
-import dataSource from "../data-source";
+import { Request } from "express";
 import { Sprite } from "../entities";
+import { spriteRepository } from "../repositories";
 
 class SpriteService {
-  addSprite = async (req: Request, res: Response) => {
-    const { name, url } = req.body;
+  create = async ({ validated }: Request): Promise<Sprite> => {
+    const sprite = await spriteRepository.save(validated as Sprite);
 
-    const sprite = new Sprite();
-
-    sprite.name = name;
-    sprite.url = url;
-
-    dataSource
-      .getRepository(Sprite)
-      .save(sprite)
-      .then((response) => res.status(201).json(response));
+    return sprite;
   };
 
-  getSprites = async (req: Request, res: Response) => {
-    return dataSource
-      .getRepository(Sprite)
-      .find()
-      .then((response) => res.status(200).json(response));
+  getAll = async (): Promise<Sprite[]> => {
+    return await spriteRepository.getAll();
   };
 }
 
