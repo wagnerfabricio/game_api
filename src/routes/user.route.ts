@@ -9,14 +9,17 @@ import {
   getUserOr404,
   verifyAdm,
   verifyToken,
+  validateSchema,
+  createAdmin,
 } from "../middlewares";
+import { userSchema } from "../schemas";
 
 const userRoute = Router();
 
 userRoute.post(
   "/register",
-  verifyToken,
-  verifyAdm,
+  validateSchema(userSchema.createUser),
+  createAdmin,
   verifyUserExists,
   userController.insertUser
 );

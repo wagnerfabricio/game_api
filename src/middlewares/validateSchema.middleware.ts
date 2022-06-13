@@ -1,7 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import Ajv from "ajv";
+import addFormats from "ajv-formats";
 
-const ajv = new Ajv({ removeAdditional: true });
+const ajv = new Ajv({ removeAdditional: true, allErrors: true });
+addFormats(ajv);
 
 const validateSchema =
   (schema: object) =>
@@ -17,7 +19,6 @@ const validateSchema =
 
     const serializer = await ajv.compile(schema);
     await serializer(payload);
-    console.log(req.body);
     req.validated = payload;
 
     return next();

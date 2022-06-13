@@ -6,19 +6,20 @@ import { AppError } from "../errors";
 import userRepository from "../repositories/user.repository";
 
 import dotenv from "dotenv";
+import { validateSchema } from "../middlewares";
+import { userSchema } from "../schemas";
+import { serializeSchema } from "../utils";
 
 dotenv.config();
 
 class userService {
-  insertUserService = async (req: Request) => {
-    const userData = req.body;
+  insertUserService = async ({ validated }: Request) => {
+    const pwd: string = await hash((validated as User).password, 10);
+    (validated as User).password = pwd;
 
-    const pwd: string = await hash(req.body.password, 10);
-    req.body.password = pwd;
+    const user: User = await userRepository.save(validated as User);
 
-    const user: User = await userRepository.save(userData);
-
-    return user;
+    return (await serializeSchema(userSchema.user, user)) as User;
   };
 
   loginService = async (req: Request) => {
@@ -53,7 +54,13 @@ class userService {
   getAllUsersService = async () => {
     const users: User[] = await userRepository.getAll();
 
-    return users;
+    const serializedUsers: User[] = await Promise.all(
+      users.map(async (user) => {
+        return (await serializeSchema(userSchema.user, user)) as User;
+      })
+    );
+
+    return serializedUsers;
   };
 
   updateUser = (req: Request) => {
