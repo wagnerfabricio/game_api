@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
 import dataSource from "../data-source";
-import { Attack, Char } from "../entities";
+import { Attack, Char, User } from "../entities";
 import { Sprite, Status } from "../entities/char";
 import { charRepository } from "../repositories";
+import { ICreateUserChar } from "../interfaces";
 
 class CharService {
   create = async ({ validated }: Request): Promise<Char> => {
@@ -15,8 +16,8 @@ class CharService {
     return chars;
   };
 
-  retrieve = async ({ char }: Request): Promise<Char> => {
-    const foundChar = await charRepository.retrieve(char);
+  retrieve = async ({ user }: Request): Promise<Char> => {
+    const foundChar = await charRepository.retrieve(user.char);
     return foundChar;
   };
 
@@ -27,7 +28,7 @@ class CharService {
     return updatedChar;
   };
 
-  createFullChar = async (req: Request) => {
+  createUserChar = async ({ validated, user }: Request) => {
     const {
       name,
       vigor,
@@ -38,7 +39,7 @@ class CharService {
       hp,
       points,
       spriteId,
-    } = req.body;
+    } = validated as ICreateUserChar;
 
     const newChar = new Char();
 
@@ -71,6 +72,8 @@ class CharService {
     newChar.attacks = attackList;
 
     await charRepository.save(newChar);
+    user.char = newChar;
+    await dataSource.getRepository(User).save(user);
 
     return newChar;
   };
