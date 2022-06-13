@@ -20,6 +20,22 @@ class SpriteRepository implements ISpriteRepository {
     return await this.spriteRepo.save(payload);
   };
 
+  saveMany = async (payload: Partial<Sprite[]>) => {
+    const insertedSprite = await this.spriteRepo
+      .createQueryBuilder()
+      .insert()
+      .values(payload)
+      .execute();
+
+    const returnSprites: Sprite[] = [];
+
+    for (let { id } of insertedSprite.generatedMaps) {
+      returnSprites.push(await this.spriteRepo.findOneBy({ id }));
+    }
+
+    return returnSprites;
+  };
+
   getAll = async () => {
     return this.spriteRepo.find();
   };
