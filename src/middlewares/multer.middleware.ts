@@ -1,11 +1,10 @@
-import multer, { MulterError } from "multer";
+import multer from "multer";
 import multerS3 from "multer-s3";
 import dotenv from "dotenv";
 
 import { v4 } from "uuid";
-import { Request, Response } from "express";
+import { Request } from "express";
 
-import { AppError } from "../errors";
 import { s3 } from "../configs";
 
 dotenv.config();

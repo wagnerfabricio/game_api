@@ -15,7 +15,7 @@ charRoutes.post("/admin/attack", attackController.create);
 charRoutes.get("/attack", attackController.getAll);
 charRoutes.post(
   "/admin/sprites",
-  multerMiddleware.uploadFile.single("file"),
+  multerMiddleware.uploadFile.any(),
   verifyValidFile,
   spriteController.create
 );
