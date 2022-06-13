@@ -5,7 +5,7 @@ import charRoutes from "./char.route";
 
 const appRoutes = (app: Express) => {
   app.use("/api/hello", helloRoutes);
-  app.use("/users", userRoute);
+  app.use("/api/users", userRoute);
   app.use("/api/chars", charRoutes);
 };
 

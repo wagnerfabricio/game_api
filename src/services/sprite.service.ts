@@ -2,11 +2,29 @@ import { Request } from "express";
 import { Sprite } from "../entities";
 import { spriteRepository } from "../repositories";
 
+interface awsFile extends Express.Multer.File {
+  fieldname: string;
+  location: string;
+}
 class SpriteService {
-  create = async ({ validated }: Request): Promise<Sprite> => {
-    const sprite = await spriteRepository.save(validated as Sprite);
+  create = async (req: Request): Promise<Sprite[]> => {
+    console.log("================================");
+    console.log(req.files);
 
-    return sprite;
+    const files = req.files as awsFile[];
+
+    const sprites: Sprite[] = files.map((file) => {
+      return {
+        name: file.fieldname,
+        url: file.location,
+      };
+    });
+
+    console.log(sprites);
+
+    await spriteRepository.saveMany(sprites);
+
+    return sprites;
   };
 
   getAll = async (): Promise<Sprite[]> => {
