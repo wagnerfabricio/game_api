@@ -8,9 +8,6 @@ interface awsFile extends Express.Multer.File {
 }
 class SpriteService {
   create = async (req: Request): Promise<Sprite[]> => {
-    console.log("================================");
-    console.log(req.files);
-
     const files = req.files as awsFile[];
 
     const sprites: Sprite[] = files.map((file) => {
@@ -19,8 +16,6 @@ class SpriteService {
         url: file.location,
       };
     });
-
-    console.log(sprites);
 
     await spriteRepository.saveMany(sprites);
 
