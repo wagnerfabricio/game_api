@@ -6,6 +6,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
+import { Char } from "../char";
 
 // import { char } from "./char.entity";
 
@@ -29,9 +30,9 @@ export class User {
   @Column({ default: false })
   adm: boolean;
 
-  // @OneToOne(() => Char, (char) => char, { eager: true })
-  // @JoinColumn()
-  // char: char;
+  @OneToOne(() => Char, (char) => char, { eager: true })
+  @JoinColumn()
+  char: Char;
 
   comparePwd = async (pwd: string): Promise<boolean> => {
     return await compare(pwd, this.password);
