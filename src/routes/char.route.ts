@@ -11,7 +11,6 @@ import { charSchema } from "../schemas";
 
 const charRoutes = Router();
 
-<<<<<<< HEAD
 charRoutes.post(
   "/admin",
   verifyToken,
@@ -37,19 +36,5 @@ charRoutes.post(
   spriteController.create
 );
 charRoutes.get("/sprites", verifyToken, spriteController.getAll);
-=======
-charRoutes.post("/admin", charController.create);
-charRoutes.get("", charController.getAll);
-charRoutes.patch("/admin/:id", charController.update);
-charRoutes.post("/admin/attack", attackController.create);
-charRoutes.get("/attack", attackController.getAll);
-charRoutes.post(
-  "/admin/sprites",
-  multerMiddleware.uploadFile.any(),
-  verifyValidFile,
-  spriteController.create
-);
-charRoutes.get("/sprites", spriteController.getAll);
->>>>>>> develop
 
 export default charRoutes;
