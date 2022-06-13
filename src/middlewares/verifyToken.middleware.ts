@@ -31,6 +31,8 @@ const verifyToken = (req: Request, res: Response, next: NextFunction) => {
         throw new AppError(404, "User token not found");
       }
 
+      req.user = user;
+
       return next();
     }
   );
