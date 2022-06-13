@@ -1,9 +1,9 @@
 {
-  "name": "kenzie-course",
+  "name": "game-api",
   "version": "1.0.0",
-  "main": "index.js",
-  "repository": "git@github.com:Kenzie-Academy-Brasil-Developers/q4-sprint2-kenzie-courses.git",
-  "author": "Alex <alexander@kenzie.com.br>",
+  "main": "server.js",
+  "repository": "https://github.com/wagnerfabricio/game_api",
+  "author": "Grupo do fundão",
   "license": "MIT",
   "dependencies": {
     "ajv": "^8.11.0",
@@ -47,7 +47,8 @@
   },
   "scripts": {
     "dev": "ts-node-dev --files --rs src/server.ts",
-    "start": "ts-node src/index.ts",
+    "start": "node dist/server.js",
+    "build": "tsc",
     "typeorm": "typeorm-ts-node-commonjs",
     "migration:create": "typeorm-ts-node-commonjs migration:create",
     "migration:generate": "typeorm-ts-node-commonjs migration:generate -d ./src/data-source.ts",
