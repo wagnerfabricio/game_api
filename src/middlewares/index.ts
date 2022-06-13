@@ -3,6 +3,8 @@ import getUserOr404 from "./getUserOr404.middleware";
 import verifyAdm from "./verifyAdm.middleware";
 import verifyToken from "./verifyToken.middleware";
 import validateSchema from "./validateSchema.middleware";
+import multerMiddleware from "./multer.middleware";
+import verifyValidFile from "./verifyValidFile.middleware";
 
 export {
   verifyUserExists,
@@ -10,4 +12,6 @@ export {
   verifyAdm,
   verifyToken,
   validateSchema,
+  multerMiddleware,
+  verifyValidFile,
 };

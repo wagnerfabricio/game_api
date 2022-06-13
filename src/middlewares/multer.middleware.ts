@@ -1,9 +1,9 @@
-import multer from "multer";
+import multer, { MulterError } from "multer";
 import multerS3 from "multer-s3";
 import dotenv from "dotenv";
 
 import { v4 } from "uuid";
-import { Request } from "express";
+import { Request, Response } from "express";
 
 import { AppError } from "../errors";
 import { s3 } from "../configs";
@@ -15,19 +15,21 @@ class MulterMiddleware {
     storage: multerS3({
       s3,
       bucket: process.env.AWS_BUCKET_NAME,
-      acl: "public-read",
       contentType: multerS3.AUTO_CONTENT_TYPE,
-      metadata: (req: Request, file, cb) => {
-        cb(null, { fieldName: file.filename });
+      metadata: (req: Request, file: Express.Multer.File, cb: Function) => {
+        if (!file) cb(null, false);
+
+        cb(null, { fieldName: file.fieldname });
       },
-      key: (req: Request, file, cb) => {
-        cb(null, `${v4()}-${file.fieldname}  `);
+      key: (req: Request, file: Express.Multer.File, cb: Function) => {
+        const filename = `${v4()}-${file.originalname}`;
+        cb(null, filename);
       },
     }),
     limits: {
       fileSize: 1024 * 1024 * 2,
     },
-    fileFilter: (req: Request, file, cb) => {
+    fileFilter: (req: Request, file: Express.Multer.File, cb: Function) => {
       const allowedMimeTypes = [
         "image/jpeg",
         "image/jpg",
@@ -37,7 +39,7 @@ class MulterMiddleware {
       if (allowedMimeTypes.includes(file.mimetype)) {
         cb(null, true);
       } else {
-        throw new AppError(400, "Invalid file type");
+        cb(null, false);
       }
     },
   });
