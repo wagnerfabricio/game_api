@@ -8,3 +8,4 @@ temp/
 *.lock
 coverage/
 package-lock*
+.DS_Store
