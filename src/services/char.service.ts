@@ -77,6 +77,14 @@ class CharService {
 
     return newChar;
   };
+
+  leaderboard = async (): Promise<Char[]> => {
+    const chars = await charRepository.getAll();
+
+    const leaderboard = chars.sort((a, b) => b.status.level - a.status.level);
+
+    return leaderboard;
+  };
 }
 
 export default new CharService();
