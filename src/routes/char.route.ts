@@ -15,6 +15,7 @@ charRoutes.post(
 charRoutes.post("", verifyToken, charController.createUserChar);
 charRoutes.get("", verifyToken, charController.getAll);
 charRoutes.get("/:id", verifyToken, charController.retrieve);
+charRoutes.get("/leaderboard", verifyToken, charController.leaderboard);
 charRoutes.patch("/admin/:id", verifyToken, verifyAdm, charController.update);
 charRoutes.patch("/:id", verifyToken, charController.update); // criar update do char que o user pode alterar
 
