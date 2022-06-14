@@ -79,9 +79,13 @@ class CharService {
   };
 
   leaderboard = async (): Promise<Char[]> => {
-    const chars = await charRepository.getAll();
-
-    const leaderboard = chars.sort((a, b) => b.status.level - a.status.level);
+    const leaderboard = await dataSource
+      .getRepository(Char)
+      .createQueryBuilder("char")
+      .leftJoinAndSelect("char.status", "status")
+      .orderBy({ "status.level": "DESC" })
+      .limit(10)
+      .getMany();
 
     return leaderboard;
   };
