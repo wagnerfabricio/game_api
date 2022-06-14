@@ -33,6 +33,8 @@ charRoutes.post(
   "/admin/sprites",
   verifyToken,
   verifyAdm,
+  multerMiddleware.uploadFile.any(),
+  verifyValidFile,
   spriteController.create
 );
 charRoutes.get("/sprites", verifyToken, spriteController.getAll);
