@@ -26,6 +26,11 @@ class CharController {
     const newChar = await charService.createUserChar(req);
     return res.status(201).json(newChar);
   };
+
+  leaderboard = async (req: Request, res: Response): Promise<Response> => {
+    const leaderboard = await charService.leaderboard();
+    return res.status(200).json(leaderboard);
+  };
 }
 
 export default new CharController();
