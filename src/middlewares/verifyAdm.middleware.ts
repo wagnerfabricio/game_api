@@ -3,7 +3,7 @@ import { AppError } from "../errors";
 import { User } from "../entities";
 
 const verifyAdm = (req: Request, res: Response, next: NextFunction) => {
-  const user: User = req.decoded;
+  const user: User = req.user;
 
   if (user.adm) {
     return next();
