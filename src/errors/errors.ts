@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import multer from "multer";
 
 type TMessage = string | Record<string, any>;
 
@@ -20,6 +21,10 @@ const errorHandler = (
 ): Response => {
   if (err instanceof AppError) {
     return res.status(err.statusCode).json({ error: err.message });
+  }
+
+  if (err instanceof multer.MulterError) {
+    return res.status(400).json({ error: err.message });
   }
 
   return res.status(500).json({
