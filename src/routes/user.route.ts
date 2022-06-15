@@ -15,8 +15,8 @@ const userRoute = Router();
 
 userRoute.post(
   "/register",
-  verifyToken,
-  verifyAdm,
+  // verifyToken,
+  // verifyAdm,
   verifyUserExists,
   userController.insertUser
 );

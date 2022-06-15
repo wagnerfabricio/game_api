@@ -3,6 +3,7 @@ import charController from "./char.controller";
 import attackController from "./attack.controller";
 import spriteController from "./sprite.controller";
 import statusController from "./status.controller";
+import battleController from "./battle.controller";
 
 export {
   userController,
@@ -10,4 +11,5 @@ export {
   attackController,
   spriteController,
   statusController,
+  battleController,
 };

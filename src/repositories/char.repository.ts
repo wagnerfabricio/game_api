@@ -7,6 +7,7 @@ interface ICharRepository {
   getAll: () => Promise<Char[]>;
   retrieve: (payload: object) => Promise<Char>;
   update: (id: string, payload: Partial<Char>) => Promise<UpdateResult>;
+  getRandomChar: (level: number) => Promise<Char>;
 }
 
 class CharRepository implements ICharRepository {
@@ -30,6 +31,15 @@ class CharRepository implements ICharRepository {
 
   update = async (id: string, payload: Partial<Char>) => {
     return await this.charRepo.update(id, { ...payload });
+  };
+
+  getRandomChar = async (level: number) => {
+    const chars = await this.charRepo.find().then((chars) => {
+      return chars.filter((char) => char.status.level === level);
+    });
+    const randomIndex = Math.floor(Math.random() * chars.length);
+
+    return chars[randomIndex];
   };
 }
 

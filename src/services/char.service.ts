@@ -35,7 +35,7 @@ class CharService {
       agility,
       magic,
       defense,
-      hp,
+      // hp,
       points,
       spriteId,
     } = req.body;
@@ -50,7 +50,7 @@ class CharService {
     newStatus.agility = agility;
     newStatus.magic = magic;
     newStatus.defense = defense;
-    newStatus.hp = hp;
+    newStatus.hp = vigor * 10;
     newStatus.points = points;
 
     newChar.status = newStatus;

@@ -9,7 +9,7 @@ import {
 
 // import { char } from "./char.entity";
 
-@Entity("userEntity")
+@Entity()
 export class User {
   @PrimaryGeneratedColumn("uuid")
   id?: string;
