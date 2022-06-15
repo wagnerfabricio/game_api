@@ -36,10 +36,10 @@ class CharService {
       agility,
       magic,
       defense,
-      hp,
+      // hp,
       points,
       spriteId,
-    } = validated as ICreateUserChar;
+    } = validated as Partial<ICreateUserChar>; //mudado para partial <<<<< Verificar >>>>>
 
     const newChar = new Char();
 
@@ -51,7 +51,7 @@ class CharService {
     newStatus.agility = agility;
     newStatus.magic = magic;
     newStatus.defense = defense;
-    newStatus.hp = hp;
+    newStatus.hp = vigor * 10;
     newStatus.points = points;
 
     newChar.status = newStatus;

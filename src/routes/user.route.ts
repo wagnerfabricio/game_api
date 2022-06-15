@@ -18,6 +18,8 @@ const userRoute = Router();
 
 userRoute.post(
   "/register",
+  // verifyToken,
+  // verifyAdm,
   validateSchema(userSchema.createUser),
   createAdmin,
   verifyUserExists,

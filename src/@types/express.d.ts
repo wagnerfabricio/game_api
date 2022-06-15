@@ -1,5 +1,5 @@
 import { User, Char, Attack, Sprite, Status } from "../entities";
-import { ICreateUserChar } from "../interfaces";
+import { ICreateUserChar, IFighters } from "../interfaces";
 
 declare global {
   namespace Express {
@@ -9,6 +9,7 @@ declare global {
       user: User;
       status: Status;
       decoded: User;
+      fighters: IFighters;
     }
   }
 }
