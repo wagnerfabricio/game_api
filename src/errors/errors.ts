@@ -27,6 +27,8 @@ const errorHandler = (
     return res.status(400).json({ error: err.message });
   }
 
+  console.error(err);
+
   return res.status(500).json({
     status: "error",
     message: "Internal server error",

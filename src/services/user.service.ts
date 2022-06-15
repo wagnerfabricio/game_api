@@ -44,7 +44,7 @@ class userService {
       userRepository.update(user.id, { active: user.active });
     }
 
-    const token: string = sign({ ...user }, process.env.SECRET_KEY, {
+    const token: string = sign({ id: user.id }, process.env.SECRET_KEY, {
       expiresIn: process.env.EXPIRES_IN,
     });
 

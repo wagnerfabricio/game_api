@@ -1,3 +1,5 @@
+import { Char } from "../entities";
+
 export interface ICreateUserChar {
   name: string;
   vigor: number;
@@ -8,4 +10,9 @@ export interface ICreateUserChar {
   hp?: number;
   points: number;
   spriteId: string;
+}
+
+export interface IFighters {
+  char: Char;
+  enemy: Char;
 }

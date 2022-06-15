@@ -6,6 +6,7 @@ import validateSchema from "./validateSchema.middleware";
 import multerMiddleware from "./multer.middleware";
 import verifyValidFile from "./verifyValidFile.middleware";
 import createAdmin from "./createAdmin.middleware";
+import verifyBattleToken from "./verifyBattleToken.middleware";
 
 export {
   verifyUserExists,
@@ -16,4 +17,5 @@ export {
   multerMiddleware,
   verifyValidFile,
   createAdmin,
+  verifyBattleToken,
 };
