@@ -38,4 +38,21 @@ describe("Get all sprites", () => {
     expect(response.body).toHaveProperty("error");
     expect(response.body.error).toBe("Missing authorization token.");
   });
+
+  it("Body error, invalid token | Status code: 401", async () => {
+    const token = generateToken(userNotAdmin);
+
+    const response = await supertest(app)
+      .get("/api/sprites")
+      .set("Authorization", "Bearer 121321" + token);
+
+    expect(response.status).toBe(401);
+    expect(response.body).toHaveProperty("error");
+    expect(response.body).toStrictEqual({
+      error: {
+        name: "JsonWebTokenError",
+        message: "invalid token",
+      },
+    });
+  });
 });
