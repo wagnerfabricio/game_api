@@ -9,6 +9,15 @@ const generateAdmin = () => {
   };
 };
 
+const generateNotAdmin = () => {
+  return {
+    username: "lucas",
+    email: "lucas@mail.com",
+    password: "1234",
+    adm: false,
+  };
+};
+
 const generateToken = (user): string => {
   const token = jwt.sign({ ...user }, process.env.SECRET_KEY as string, {
     expiresIn: process.env.EXPIRES_IN,
@@ -17,4 +26,4 @@ const generateToken = (user): string => {
   return token;
 };
 
-export { generateToken, generateAdmin };
+export { generateToken, generateAdmin, generateNotAdmin };
