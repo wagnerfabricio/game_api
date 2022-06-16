@@ -60,10 +60,6 @@ describe("Create a Sprite", () => {
 
     expect(response.status).toBe(401);
     expect(response.body).toHaveProperty("error");
-    expect(response.body.error).toHaveProperty("name");
-    expect(response.body.error).toHaveProperty("message");
-    expect(response.body.error.name).toBe("JsonWebTokenError");
-    expect(response.body.error.message).toBe("invalid token");
     expect(response.body).toStrictEqual({
       error: {
         name: "JsonWebTokenError",
@@ -83,5 +79,18 @@ describe("Create a Sprite", () => {
     expect(response.status).toBe(422);
     expect(response.body).toHaveProperty("error");
     expect(response.body.error).toBe("Need admim permission.");
+  });
+
+  it("Body error, invalid file format | Status code: 400", async () => {
+    const token = generateToken(userAdmin);
+
+    const response = await supertest(app)
+      .post("/api/sprites/admin")
+      .set("Authorization", "Bearer " + token)
+      .send({ image: "teste.png" });
+
+    expect(response.status).toBe(400);
+    expect(response.body).toHaveProperty("error");
+    expect(response.body.error).toBe("Invalid file format");
   });
 });
