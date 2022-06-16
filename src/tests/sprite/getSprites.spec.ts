@@ -1,6 +1,6 @@
 import app from "../../app";
-import { connection } from "../../tests";
-import { generateToken, generateAdmin, generateNotAdmin } from ".";
+import { connection } from "../.";
+import { generateToken, generateNotAdmin } from "../.";
 import supertest from "supertest";
 import { User } from "../../entities";
 import { userRepository } from "../../repositories";

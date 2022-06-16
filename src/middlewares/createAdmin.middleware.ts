@@ -30,12 +30,8 @@ const createAdmin = async (req: Request, res: Response, next: NextFunction) => {
 
       const user: User = await userRepository.retrieve({ id: req.decoded.id });
 
-      if (!user) {
-        throw new AppError(404, "User token not found");
-      }
-
       if (!user.adm) {
-        throw new AppError(422, "Need admim permission.");
+        throw new AppError(422, "Need admin permission.");
       }
 
       req.user = user;
