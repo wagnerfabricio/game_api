@@ -1,5 +1,5 @@
 import { connection } from "../../tests";
-import { generateToken, generateAdmin } from ".";
+import { generateToken, generateAdmin, generateNotAdmin } from ".";
 import supertest from "supertest";
 import app from "../../app";
 import { User, Sprite } from "../../entities";
@@ -14,7 +14,10 @@ describe("Create a Sprite", () => {
     await connection.connect();
 
     userAdmin = await userRepository.save({ ...generateAdmin(), adm: true });
-    // userNotAdmin = await userRepository.save({ ...generateUser(), adm: false });
+    userNotAdmin = await userRepository.save({
+      ...generateNotAdmin(),
+      adm: false,
+    });
   });
 
   afterAll(async () => {
@@ -67,5 +70,18 @@ describe("Create a Sprite", () => {
         message: "invalid token",
       },
     });
+  });
+
+  it("Body error, user not admin | Status code: 422", async () => {
+    const token = generateToken(userNotAdmin);
+
+    const response = await supertest(app)
+      .post("/api/sprites/admin")
+      .set("Authorization", "Bearer " + token)
+      .attach("image", "./src/tests/sprite/test.png");
+
+    expect(response.status).toBe(422);
+    expect(response.body).toHaveProperty("error");
+    expect(response.body.error).toBe("Need admim permission.");
   });
 });
