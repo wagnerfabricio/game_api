@@ -46,4 +46,26 @@ describe("Create a Sprite", () => {
     expect(response.body.error).toBe("Missing authorization token.");
     expect(typeof response.body).toBe("object");
   });
+
+  it("Body error, invalid token | Status code: 401", async () => {
+    const token = generateToken(userAdmin);
+
+    const response = await supertest(app)
+      .post("/api/sprites/admin")
+      .set("Authorization", "Bearer 121321" + token)
+      .attach("image", "./src/tests/sprite/test.png");
+
+    expect(response.status).toBe(401);
+    expect(response.body).toHaveProperty("error");
+    expect(response.body.error).toHaveProperty("name");
+    expect(response.body.error).toHaveProperty("message");
+    expect(response.body.error.name).toBe("JsonWebTokenError");
+    expect(response.body.error.message).toBe("invalid token");
+    expect(response.body).toStrictEqual({
+      error: {
+        name: "JsonWebTokenError",
+        message: "invalid token",
+      },
+    });
+  });
 });
