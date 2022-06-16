@@ -29,9 +29,6 @@ describe("Create a Sprite", () => {
       .set("Authorization", "Bearer " + token)
       .attach("image", "./src/tests/sprite/test.png");
 
-    console.log("===========================================================");
-    console.log(response.body);
-
     expect(response.status).toBe(201);
     expect(typeof response.body).toBe("object");
     expect(response.body[0].id).toBeTruthy();
@@ -39,5 +36,14 @@ describe("Create a Sprite", () => {
     expect(response.body[0].name).toBeTruthy();
   });
 
-  it("Body error, missing token | Status code: 404", async () => {});
+  it("Body error, missing token | Status code: 404", async () => {
+    const response = await supertest(app)
+      .post("/api/sprites/admin")
+      .attach("image", "./src/tests/sprite/test.png");
+
+    expect(response.status).toBe(404);
+    expect(response.body).toHaveProperty("error");
+    expect(response.body.error).toBe("Missing authorization token.");
+    expect(typeof response.body).toBe("object");
+  });
 });
