@@ -1,10 +1,9 @@
-import { connection } from "../../tests";
-import { generateToken, generateAdmin, generateNotAdmin } from ".";
+import { connection } from "../.";
+import { generateToken, generateAdmin, generateNotAdmin } from "../.";
 import supertest from "supertest";
 import app from "../../app";
-import { User, Sprite } from "../../entities";
-import { spriteRepository, userRepository } from "../../repositories";
-import path from "path";
+import { User } from "../../entities";
+import { userRepository } from "../../repositories";
 
 describe("Create a Sprite", () => {
   let userAdmin: User;
@@ -81,13 +80,39 @@ describe("Create a Sprite", () => {
     expect(response.body.error).toBe("Need admim permission.");
   });
 
-  it("Body error, invalid file format | Status code: 400", async () => {
+  it("Body error, invalid file format (no file) | Status code: 400", async () => {
     const token = generateToken(userAdmin);
 
     const response = await supertest(app)
       .post("/api/sprites/admin")
       .set("Authorization", "Bearer " + token)
       .send({ image: "teste.png" });
+
+    expect(response.status).toBe(400);
+    expect(response.body).toHaveProperty("error");
+    expect(response.body.error).toBe("Invalid file format");
+  });
+
+  it("Body error, invalid file format (wrong file extension) | Status code: 400", async () => {
+    const token = generateToken(userAdmin);
+
+    const response = await supertest(app)
+      .post("/api/sprites/admin")
+      .set("Authorization", "Bearer " + token)
+      .send({ image: "./src/tests/sprite/wrongFormat.txt" });
+
+    expect(response.status).toBe(400);
+    expect(response.body).toHaveProperty("error");
+    expect(response.body.error).toBe("Invalid file format");
+  });
+
+  it("Body error, file size | Status code: 400", async () => {
+    const token = generateToken(userAdmin);
+
+    const response = await supertest(app)
+      .post("/api/sprites/admin")
+      .set("Authorization", "Bearer " + token)
+      .send({ image: "./src/tests/sprite/agrvai.png" });
 
     expect(response.status).toBe(400);
     expect(response.body).toHaveProperty("error");

@@ -8,7 +8,7 @@ const verifyUserExists = async (
   res: Response,
   next: NextFunction
 ) => {
-  const userData = req.body;
+  const userData = req.validated as User;
   const user: User = await userRepository.retrieve({ email: userData.email });
 
   if (user) {
