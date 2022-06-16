@@ -30,4 +30,12 @@ describe("Get all sprites", () => {
     expect(response.status).toBe(200);
     expect(typeof response.body).toBe("object");
   });
+
+  it("Body error, missing token | Status code: 404", async () => {
+    const response = await supertest(app).get("/api/sprites");
+
+    expect(response.status).toBe(404);
+    expect(response.body).toHaveProperty("error");
+    expect(response.body.error).toBe("Missing authorization token.");
+  });
 });
