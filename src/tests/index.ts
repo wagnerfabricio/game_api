@@ -16,8 +16,16 @@ export class Connection {
   };
 
   disconnect = async () => {
-    await this.connection.destroy();
-  };
+    await this.connection.destroy()
+  }
+
+  clear = async () => {
+    const entities = this.connection.entityMetadatas
+    entities.forEach(async (entity) => {
+      const repo = this.connection.getRepository(entity.name)
+      await repo.query(`DELETE FROM ${entity.tableName}`)
+    })
+  }
 }
 
 const connection = new Connection();
@@ -48,4 +56,23 @@ const generateToken = (user): string => {
   return token;
 };
 
-export { generateToken, generateAdmin, generateNotAdmin, connection };
+const generateChar = () => {
+  return {
+    name: faker.random.words(3),
+    vigor: Number(faker.random.numeric(2)),
+    strength: Number(faker.random.numeric(2)),
+    agility: Number(faker.random.numeric(2)),
+    magic: Number(faker.random.numeric(2)),
+    defense: Number(faker.random.numeric(2)),
+    points: Number(faker.random.numeric(2)),
+    spriteId: faker.internet.avatar(),
+  }
+}
+
+export {
+  generateChar,
+  generateToken,
+  generateAdmin,
+  generateNotAdmin,
+  connection,
+}
