@@ -35,7 +35,7 @@ class CharRepository implements ICharRepository {
 
   getRandomChar = async (level: number) => {
     const chars = await this.charRepo.find().then((chars) => {
-      return chars.filter((char) => char.status.level === level);
+      return chars.filter((char) => char.status.level <= level);
     });
     const randomIndex = Math.floor(Math.random() * chars.length);
 

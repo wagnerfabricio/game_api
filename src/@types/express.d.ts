@@ -10,6 +10,7 @@ declare global {
       status: Status;
       decoded: User;
       fighters: IFighters;
+      sprite: Sprite;
     }
   }
 }

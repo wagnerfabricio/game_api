@@ -7,6 +7,7 @@ import multerMiddleware from "./multer.middleware";
 import verifyValidFile from "./verifyValidFile.middleware";
 import createAdmin from "./createAdmin.middleware";
 import verifyBattleToken from "./verifyBattleToken.middleware";
+import verifySpriteExists from "./verifySpriteExists.middleware";
 
 export {
   verifyUserExists,
@@ -18,4 +19,5 @@ export {
   verifyValidFile,
   createAdmin,
   verifyBattleToken,
+  verifySpriteExists,
 };

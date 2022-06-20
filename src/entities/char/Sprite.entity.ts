@@ -8,6 +8,9 @@ export class Sprite {
   @Column({ unique: true })
   name: string;
 
+  @Column({ nullable: true })
+  key: string;
+
   @Column()
   url: string;
 }

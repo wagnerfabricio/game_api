@@ -47,6 +47,11 @@ class SpriteRepository implements ISpriteRepository {
   update = async (id: string, payload: Partial<Sprite>) => {
     return await this.spriteRepo.update(id, { ...payload });
   };
+
+  delete = async (payload: Sprite) => {
+    await this.spriteRepo.remove(payload);
+    return;
+  };
 }
 
 export default new SpriteRepository();

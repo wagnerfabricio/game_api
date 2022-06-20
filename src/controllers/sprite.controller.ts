@@ -11,6 +11,11 @@ class SpriteController {
     const sprites = await spriteService.getAll();
     return res.status(200).json(sprites);
   };
+
+  delete = async (req: Request, res: Response): Promise<Response> => {
+    await spriteService.delete(req);
+    return res.status(200).json({ message: "Sprite deleted" });
+  };
 }
 
 export default new SpriteController();
