@@ -9,19 +9,20 @@ const validadeCreateChar = (
   res: Response,
   next: NextFunction
 ) => {
-  const char = req.body as ICreateUserChar;
-  const remainingPoints = 15;
+  const char = req.validated as ICreateUserChar;
+  const remainingPoints = 15; // passado aqui pois, não precisa ser passado na requisição já que o default é 15.
   const totalPoints =
     char.vigor + char.strength + char.agility + char.magic + char.defense;
   const user: User = req.user;
 
   if (totalPoints > remainingPoints) {
-    if (user.adm) {
-      return next();
-    }
-    throw new AppError(400, {
-      error: "You do not have enough points to create this character.",
-    });
+    // if (user.adm) {
+    //   return next();
+    // }
+    throw new AppError(
+      400,
+      "You haven't enough points to create this character."
+    );
   }
   return next();
 };
