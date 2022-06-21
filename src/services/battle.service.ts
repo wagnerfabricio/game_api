@@ -50,39 +50,58 @@ class BattleService {
 
   battle = async ({ body, fighters }: Request) => {
     const { char, enemy } = fighters;
-
-    if (enemy.status.agility > char.status.agility) {
-      const { enemyAttack, enemyDamage } = await this.enemyAttack(fighters);
-      const { charAttack, damage } = await this.charAttack(
-        body.attackId,
-        fighters
-      );
-    }
+    // Char Attack
     const { charAttack, damage } = await this.charAttack(
       body.attackId,
       fighters
     );
+    // Enemy Attack
     const { enemyAttack, enemyDamage } = await this.enemyAttack(fighters);
 
-    if (enemy.status.hp <= 0) {
-      await charRepo.update(char.id, { token: null });
-      return {
-        msg: {
-          char_attack: `${char.name} used ${charAttack.name}`,
-          enemy_damage: `${enemy.name} take ${damage} damage and died.`,
-          victory: `${char.name} wins!`,
-        },
-      };
-    }
-    if (char.status.hp <= 0) {
-      await charRepo.update(char.id, { token: null });
-      return {
-        msg: {
-          enemy_attack: `${enemy.name} used ${enemyAttack.name}`,
-          char_damage: `${char.name} take ${enemyDamage} damage and died.`,
-          victory: `${enemy.name} wins!`,
-        },
-      };
+    // Verify if char is alive
+    // If enemy is faster, char hp will be verified first.
+    if (enemy.status.agility > char.status.agility) {
+      if (char.status.hp <= 0) {
+        await charRepo.update(char.id, { token: null });
+        return {
+          msg: {
+            enemy_attack: `${enemy.name} used ${enemyAttack.name}`,
+            char_damage: `${char.name} take ${enemyDamage} damage and died.`,
+            victory: `${enemy.name} wins!`,
+          },
+        };
+      }
+      if (enemy.status.hp <= 0) {
+        await charRepo.update(char.id, { token: null });
+        return {
+          msg: {
+            char_attack: `${char.name} used ${charAttack.name}`,
+            enemy_damage: `${enemy.name} take ${damage} damage and died.`,
+            victory: `${char.name} wins!`,
+          },
+        };
+      }
+    } else {
+      if (enemy.status.hp <= 0) {
+        await charRepo.update(char.id, { token: null });
+        return {
+          msg: {
+            char_attack: `${char.name} used ${charAttack.name}`,
+            enemy_damage: `${enemy.name} take ${damage} damage and died.`,
+            victory: `${char.name} wins!`,
+          },
+        };
+      }
+      if (char.status.hp <= 0) {
+        await charRepo.update(char.id, { token: null });
+        return {
+          msg: {
+            enemy_attack: `${enemy.name} used ${enemyAttack.name}`,
+            char_damage: `${char.name} take ${enemyDamage} damage and died.`,
+            victory: `${enemy.name} wins!`,
+          },
+        };
+      }
     }
 
     const updatedUserCharToken = sign({ char, enemy }, process.env.SECRET_KEY, {

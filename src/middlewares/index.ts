@@ -8,6 +8,7 @@ import verifyValidFile from "./verifyValidFile.middleware";
 import createAdmin from "./createAdmin.middleware";
 import verifyBattleToken from "./verifyBattleToken.middleware";
 import verifySpriteExists from "./verifySpriteExists.middleware";
+import validadeCreateChar from "./validateCreateChar.middleware";
 
 export {
   verifyUserExists,
@@ -20,4 +21,5 @@ export {
   createAdmin,
   verifyBattleToken,
   verifySpriteExists,
+  validadeCreateChar,
 };

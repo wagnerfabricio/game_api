@@ -1,7 +1,12 @@
 import { Router } from "express";
 import { charController } from "../controllers";
 
-import { validateSchema, verifyAdm, verifyToken } from "../middlewares";
+import {
+  validadeCreateChar,
+  validateSchema,
+  verifyAdm,
+  verifyToken,
+} from "../middlewares";
 import { charSchema } from "../schemas";
 
 const charRoutes = Router();
@@ -16,6 +21,7 @@ charRoutes.post(
   "",
   verifyToken,
   validateSchema(charSchema.createChar),
+  validadeCreateChar,
   charController.createUserChar
 );
 charRoutes.get("", verifyToken, charController.getAll);
