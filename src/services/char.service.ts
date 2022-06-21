@@ -4,7 +4,8 @@ import { Attack, Char, User } from "../entities";
 import { Sprite, Status } from "../entities/char";
 import { charRepository } from "../repositories";
 import { ICreateUserChar } from "../interfaces";
-
+import { AppError } from "../errors";
+import { charUtil as utl } from "../utils";
 class CharService {
   create = async ({ validated }: Request): Promise<Char> => {
     const char = await charRepository.save(validated as Char);
@@ -88,6 +89,116 @@ class CharService {
       .getMany();
 
     return leaderboard;
+  };
+
+  upgradeChar = async ({ body, user }: Request) => {
+    const { char } = user;
+    if (!utl.verifyMaxLvl(char)) {
+      throw new AppError(400, "Max level reached");
+    }
+    switch (body.status) {
+      case "vigor":
+        if (char.status.points >= 1) {
+          char.status.points -= 1;
+          char.status.vigor += 1;
+          char.status.hp = char.status.vigor * 10;
+          char.status.level += 1;
+          await charRepository.save(char);
+          return {
+            msg: `Up to LVL ${
+              char.status.level
+            }! ${body.status.toUpperCase()} upgraded to ${
+              char.status.vigor
+            } points!`,
+          };
+        } else {
+          throw new AppError(
+            400,
+            "You don't have enough points to upgrade this attribute"
+          );
+        }
+        break;
+      case "strength":
+        if (char.status.points >= 1) {
+          char.status.points -= 1;
+          char.status.strength += 1;
+          char.status.level += 1;
+          await charRepository.save(char);
+          return {
+            msg: `Up to LVL ${
+              char.status.level
+            }! ${body.status.toUpperCase()} upgraded to ${
+              char.status.strength
+            } points!`,
+          };
+        } else {
+          throw new AppError(
+            400,
+            "You don't have enough points to upgrade this attribute"
+          );
+        }
+        break;
+      case "agility":
+        if (char.status.points >= 1) {
+          char.status.points -= 1;
+          char.status.agility += 1;
+          char.status.level += 1;
+          await charRepository.save(char);
+          return {
+            msg: `Up to LVL ${
+              char.status.level
+            }! ${body.status.toUpperCase()} upgraded to ${
+              char.status.agility
+            } points!`,
+          };
+        } else {
+          throw new AppError(
+            400,
+            "You don't have enough points to upgrade this attribute"
+          );
+        }
+        break;
+      case "magic":
+        if (char.status.points >= 1) {
+          char.status.points -= 1;
+          char.status.magic += 1;
+          char.status.level += 1;
+          await charRepository.save(char);
+          return {
+            msg: `Up to LVL ${
+              char.status.level
+            }! ${body.status.toUpperCase()} upgraded to ${
+              char.status.magic
+            } points!`,
+          };
+        } else {
+          throw new AppError(
+            400,
+            "You don't have enough points to upgrade this attribute"
+          );
+        }
+        break;
+      case "defense":
+        if (char.status.points >= 1) {
+          char.status.points -= 1;
+          char.status.defense += 1;
+          char.status.level += 1;
+          await charRepository.save(char);
+          return {
+            msg: `Up to LVL ${
+              char.status.level
+            }! ${body.status.toUpperCase()} upgraded to ${
+              char.status.defense
+            } points!`,
+          };
+        } else {
+          throw new AppError(
+            400,
+            "You don't have enough points to upgrade this attribute"
+          );
+        }
+        break;
+    }
   };
 }
 

@@ -5,7 +5,7 @@ export class Status {
   @PrimaryGeneratedColumn("uuid")
   id?: string;
 
-  @Column({default: 15})
+  @Column({ default: 1 })
   level: number;
 
   @Column()

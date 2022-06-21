@@ -31,6 +31,11 @@ class CharController {
     const leaderboard = await charService.leaderboard();
     return res.status(200).json(leaderboard);
   };
+
+  upgrade = async (req: Request, res: Response): Promise<Response> => {
+    const upgradedChar = await charService.upgradeChar(req);
+    return res.status(200).json(upgradedChar);
+  };
 }
 
 export default new CharController();
