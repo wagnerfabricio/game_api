@@ -1,0 +1,700 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Game api",
+    "description": "Super mega ultra turn by turn game api",
+    "version": "1.0.1"
+  },
+  "servers": [
+    {
+      "url": "https://fundao-game-api.herokuapp.com/api",
+      "description": "production game api"
+    },
+    {
+      "url": "localhost:3000/api",
+      "description": "local development enviroment"
+    }
+  ],
+  "paths": {
+    "/users/register": {
+      "summary": "Register new user",
+      "description": "Route used to register new user, in case of register new admin user, it's necessary admin access token on header",
+      "post": {
+        "tags": ["User"],
+        "summary": "Register users",
+        "description": "Creation of regular users",
+        "parameters": [
+          {
+            "name": "accessToken",
+            "in": "header",
+            "required": false,
+            "description": "Only to create new admin is necessary admin access Token",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUser"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Success": {
+                    "value": "{\n\t\"username\": \"kenzinho\",\n\t\"email\": \"kenzinho@mail.com\",\n\t\"id\": \"f9c4b2f1-22a0-41c2-a738-1883a6c42379\",\n\t\"active\": true,\n\t\"adm\": false\n}"
+                  },
+                  "Success on add Admin": {
+                    "value": "{\n\t\"username\": \"kenzinho\",\n\t\"email\": \"kenzinho@mail.com\",\n\t\"id\": \"f9c4b2f1-22a0-41c2-a738-1883a6c42379\",\n\t\"active\": true,\n\t\"adm\": true\n}"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/CreateUserRequiredFields"
+          },
+          "404": {
+            "$ref": "#/components/responses/MissingToken"
+          },
+          "422": {
+            "$ref": "#/components/responses/NeedAdminPermission"
+          }
+        }
+      }
+    },
+    "/users/login": {
+      "post": {
+        "tags": ["User"],
+        "summary": "Login into user account",
+        "description": "If email and password is valid, return user access token",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "kenzinho@mail.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "senhaForte!"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Success": {
+                    "value": "{\n\t\"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk0ZTZlMWZhLTU0NTMtNDA5Yy05MmU1LWQwZTQxZDE4OGE4MyIsImlhdCI6MTY1NTgzNTI3MiwiZXhwIjoxNjU1OTIxNjcyfQ.gXoU8CuyiFNdB-JB7hhpE0O49XayPgQaicZbuB49Nmk\"\n}"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Invalid credentials": {
+                    "value": "{\n\t\"error\": \"Invalid credentials\"\n}"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/attacks/admin": {
+      "post": {
+        "tags": ["Attacks", "Admin"],
+        "summary": "Create new attack",
+        "description": "Only game administrator can operate this route, create new attacks for chars.  ",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AdminAccessToken"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Hadouken"
+                  },
+                  "power": {
+                    "type": "number",
+                    "example": 9
+                  },
+                  "accuracy": {
+                    "type": "number",
+                    "example": 3
+                  },
+                  "hits": {
+                    "type": "number",
+                    "example": 1
+                  },
+                  "type": {
+                    "type": "string",
+                    "example": "magic"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Success": {
+                    "value": "{\n\t\"name\": \"Hadouken\",\n\t\"power\": 9,\n\t\"accuracy\": 3,\n\t\"hits\": 1,\n\t\"type\": \"magic\",\n\t\"id\": \"5be18216-4ca0-4f7c-8567-4a040aed212f\"\n}"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Missing Name": {
+                    "value": "{\n\t\"error\":\t\t\"data must have required property 'name'\"\n}"
+                  },
+                  "Missing Power": {
+                    "value": "{\n\t\"error\":\t\t\"data must have required property 'power'\"\n}"
+                  },
+                  "Missing Accuracy": {
+                    "value": "{\n\t\"error\":\t\t\"data must have required property 'accuracy'\"\n}"
+                  },
+                  "Missing Hits": {
+                    "value": "{\n\t\"error\":\t\t\"data must have required property 'hits'\"\n}"
+                  },
+                  "Missing Type": {
+                    "value": "{\n\t\"error\":\t\t\"data must have required property 'type'\"\n}"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/MissingToken"
+          },
+          "422": {
+            "$ref": "#/components/responses/NeedAdminPermission"
+          }
+        }
+      }
+    },
+    "/attacks": {
+      "get": {
+        "tags": ["Attacks"],
+        "summary": "Return all attacks",
+        "description": "Return all attacks registered",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/UserAccessToken"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Success": {
+                    "value": "[\n\t{\n\t\t\"id\": \"21e46ea6-6715-4bf4-b773-937b35f92b99\",\n\t\t\"name\": \"Smash\",\n\t\t\"power\": 9,\n\t\t\"accuracy\": 1,\n\t\t\"hits\": 1,\n\t\t\"type\": \"physical\"\n\t},\n\t{\n\t\t\"id\": \"5626af18-e904-49fa-a6e6-e50d24501ad9\",\n\t\t\"name\": \"Perequepepe\",\n\t\t\"power\": 1,\n\t\t\"accuracy\": 8,\n\t\t\"hits\": 3,\n\t\t\"type\": \"physical\"\n\t},\n\t{\n\t\t\"id\": \"f300faef-cfa8-4220-9f94-e0d1b500234e\",\n\t\t\"name\": \"Papaleguas\",\n\t\t\"power\": 3,\n\t\t\"accuracy\": 1,\n\t\t\"hits\": 8,\n\t\t\"type\": \"magic\"\n\t}\n]"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/MissingToken"
+          }
+        }
+      }
+    },
+    "/sprites/admin": {
+      "post": {
+        "tags": ["Sprites", "Admin"],
+        "summary": "Create new char sprite",
+        "description": "Create new char sprite, necessary send image of type: png, jpg, jpeg or gif, accept one or more images at the same time. necessary send image name",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AdminAccessToken"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "image/png/jpeg/jpg/gif": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Success": {
+                    "value": "[\n\t{\n\t\t\"name\": \"malucobaco2\",\n\t\t\"url\": \"https://fundao-game-api.s3.sa-east-1.amazonaws.com/05467f5f-6176-49d3-89ff-c2b57ca5ff76-bet.png\",\n\t\t\"key\": \"05467f5f-6176-49d3-89ff-c2b57ca5ff76-bet.png\",\n\t\t\"id\": \"e1981dde-5940-4837-a950-df2602c4b682\"\n\t}\n]"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/MissingToken"
+          },
+          "422": {
+            "$ref": "#/components/responses/NeedAdminPermission"
+          }
+        }
+      }
+    },
+    "/sprites": {
+      "get": {
+        "tags": ["Sprites"],
+        "summary": "Get all sprites",
+        "description": "Return a array of all sprites",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/UserAccessToken"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Success": {
+                    "value": "[\n\t{\n\t\t\"id\": \"dd65d19e-5e07-4a91-af9e-a28c9aca0d5a\",\n\t\t\"name\": \"bet\",\n\t\t\"key\": null,\n\t\t\"url\": \"https://fundao-game-api.s3.sa-east-1.amazonaws.com/13f81232-f84b-4262-856b-228008d84d41-bet.png\"\n\t},\n\t{\n\t\t\"id\": \"584f2555-fa7a-46b4-b163-2fc4438cd935\",\n\t\t\"name\": \"chiken_pox\",\n\t\t\"key\": null,\n\t\t\"url\": \"https://fundao-game-api.s3.sa-east-1.amazonaws.com/2e14d147-d377-4827-be2a-79ffbd2bfc57-chiken_pox.png\"\n\t}\n]"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/MissingToken"
+          }
+        }
+      }
+    },
+    "/sprites/{spriteId}": {
+      "delete": {
+        "summary": "Delete sprite by id",
+        "tags": ["Sprites", "Admin"],
+        "description": "Delete sprite by id passing id by url param, necessary administrator class",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AdminAccessToken"
+          },
+          {
+            "name": "spriteId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "e1981dde-5940-4837-a950-df2602c4b682"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Success": {
+                    "value": "{\n\t\"message\": \"Sprite deleted\"\n}"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/MissingToken"
+          },
+          "422": {
+            "$ref": "#/components/responses/NeedAdminPermission"
+          }
+        }
+      }
+    },
+    "/chars": {
+      "post": {
+        "tags": ["Chars"],
+        "summary": "Create a new Char",
+        "description": "Users can create one char, the total of the status points can't be greater then 15. <br /> Users can't create a new char if already have one. <br /> Necessary a valid spriteId. <br /> Three new attacks will be randomically selected for the new char.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/UserAccessToken"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Mobidik"
+                  },
+                  "vigor": {
+                    "type": "number",
+                    "example": 4
+                  },
+                  "strength": {
+                    "type": "number",
+                    "example": 1
+                  },
+                  "agility": {
+                    "type": "number",
+                    "example": 2
+                  },
+                  "magic": {
+                    "type": "number",
+                    "example": 3
+                  },
+                  "defense": {
+                    "type": "number",
+                    "example": 3
+                  },
+                  "spriteId": {
+                    "type": "string",
+                    "example": "beae480b-55e4-47a3-bc5a-279a6ff83097"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Success": {
+                    "value": "{\n\t\"name\": \"Mobidiko4\",\n\t\"status\": {\n\t\t\"vigor\": 4,\n\t\t\"strength\": 1,\n\t\t\"agility\": 2,\n\t\t\"magic\": 1,\n\t\t\"defense\": 6,\n\t\t\"hp\": 40,\n\t\t\"points\": 15,\n\t\t\"id\": \"89c5220d-22c8-4caf-9d2f-a6fcd0f2b882\",\n\t\t\"level\": 15\n\t},\n\t\"sprite\": {\n\t\t\"id\": \"beae480b-55e4-47a3-bc5a-279a6ff83097\",\n\t\t\"name\": \"sword\",\n\t\t\"key\": null,\n\t\t\"url\": \"https://fundao-game-api.s3.sa-east-1.amazonaws.com/f4fc651a-bc1a-4f59-94d5-210eff22a714-sword.png\"\n\t},\n\t\"attacks\": [\n\t\t{\n\t\t\t\"id\": \"80dcd263-ad84-45a9-8886-4a32ca486935\",\n\t\t\t\"name\": \"Bola de fogo2\",\n\t\t\t\"power\": 9,\n\t\t\t\"accuracy\": 1,\n\t\t\t\"hits\": 1,\n\t\t\t\"type\": \"magic\"\n\t\t},\n\t\t{\n\t\t\t\"id\": \"c2a211ec-acf8-44b2-88d3-75c1965af9fe\",\n\t\t\t\"name\": \"Punch loko\",\n\t\t\t\"power\": 3,\n\t\t\t\"accuracy\": 1,\n\t\t\t\"hits\": 8,\n\t\t\t\"type\": \"physical\"\n\t\t},\n\t\t{\n\t\t\t\"id\": \"43c36801-f494-411e-81d2-1af8079645bb\",\n\t\t\t\"name\": \"Bola de fogo\",\n\t\t\t\"power\": 9,\n\t\t\t\"accuracy\": 1,\n\t\t\t\"hits\": 1,\n\t\t\t\"type\": \"magic\"\n\t\t}\n\t],\n\t\"token\": null,\n\t\"id\": \"d524193d-4914-4c3d-a57c-c2c3425ff70e\"\n}"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Missing name field": {
+                    "value": "{\n\t\"error\": \"data must have required property 'name'\"\n}"
+                  },
+                  "Missing vigor field": {
+                    "value": "{\n\t\"error\": \"data must have required property 'vigor'\"\n}"
+                  },
+                  "Missing strength field": {
+                    "value": "{\n\t\"error\": \"data must have required property 'strength'\"\n}"
+                  },
+                  "Missing agility field": {
+                    "value": "{\n\t\"error\": \"data must have required property 'agility'\"\n}"
+                  },
+                  "Missing magic field": {
+                    "value": "{\n\t\"error\": \"data must have required property 'magic'\"\n}"
+                  },
+                  "Missing defense field": {
+                    "value": "{\n\t\"error\": \"data must have required property 'defense'\"\n}"
+                  },
+                  "Missing spriteId field": {
+                    "value": "{\n\t\"error\": \"data must have required property 'spriteId'\"\n}"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/MissingToken"
+          }
+        }
+      },
+      "get": {
+        "tags": ["Chars"],
+        "summary": "Return all registered chars",
+        "description": "Need AccessToken, will return all registered chars",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/UserAccessToken"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Success": {
+                    "value": "[\n\t{\n\t\t\"id\": \"5a4f7506-d683-4b99-a2ad-644ab627d16a\",\n\t\t\"name\": \"Dogo\",\n\t\t\"token\": null,\n\t\t\"status\": {\n\t\t\t\"id\": \"6dc7ac16-58d2-4f69-8997-e78cf1884121\",\n\t\t\t\"level\": 15,\n\t\t\t\"vigor\": 9,\n\t\t\t\"strength\": 1,\n\t\t\t\"agility\": 9,\n\t\t\t\"magic\": 1,\n\t\t\t\"defense\": 5,\n\t\t\t\"hp\": 90,\n\t\t\t\"points\": 0\n\t\t},\n\t\t\"attacks\": [\n\t\t\t{\n\t\t\t\t\"id\": \"f7630575-0f88-4137-98b6-5cf6ea3a9a77\",\n\t\t\t\t\"name\": \"Farfarellas\",\n\t\t\t\t\"power\": 1,\n\t\t\t\t\"accuracy\": 8,\n\t\t\t\t\"hits\": 8,\n\t\t\t\t\"type\": \"physical\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": \"43c36801-f494-411e-81d2-1af8079645bb\",\n\t\t\t\t\"name\": \"Bola de fogo\",\n\t\t\t\t\"power\": 9,\n\t\t\t\t\"accuracy\": 1,\n\t\t\t\t\"hits\": 1,\n\t\t\t\t\"type\": \"magic\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": \"5626af18-e904-49fa-a6e6-e50d24501ad9\",\n\t\t\t\t\"name\": \"Perequepepe\",\n\t\t\t\t\"power\": 1,\n\t\t\t\t\"accuracy\": 8,\n\t\t\t\t\"hits\": 3,\n\t\t\t\t\"type\": \"physical\"\n\t\t\t}\n\t\t],\n\t\t\"sprite\": {\n\t\t\t\"id\": \"dd65d19e-5e07-4a91-af9e-a28c9aca0d5a\",\n\t\t\t\"name\": \"bet\",\n\t\t\t\"key\": null,\n\t\t\t\"url\": \"https://fundao-game-api.s3.sa-east-1.amazonaws.com/13f81232-f84b-4262-856b-228008d84d41-bet.png\"\n\t\t}\n\t}\n]"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/MissingToken"
+          }
+        }
+      }
+    },
+    "/chars/leaderboard": {
+      "get": {
+        "tags": ["Chars"],
+        "summary": "Get Top 10 most powerful chars",
+        "description": "Return the top 10 ranking of the most powerful chars",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/UserAccessToken"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Success": {
+                    "value": "[\n\t{\n\t\t\"id\": \"9af77008-b9ef-4707-b1d4-eb9d1a98185f\",\n\t\t\"name\": \"Zé do Caixão\",\n\t\t\"token\": null,\n\t\t\"status\": {\n\t\t\t\"id\": \"b602510b-dcc3-4d1a-a902-eb9560d998b7\",\n\t\t\t\"level\": 15,\n\t\t\t\"vigor\": 4,\n\t\t\t\"strength\": 1,\n\t\t\t\"agility\": 2,\n\t\t\t\"magic\": 1,\n\t\t\t\"defense\": 6,\n\t\t\t\"hp\": 40,\n\t\t\t\"points\": 0\n\t\t}\n\t},\n\t{\n\t\t\"id\": \"b197ae16-b9f1-43f8-89b2-5ea6d613c4ba\",\n\t\t\"name\": \"Banana Man\",\n\t\t\"token\": null,\n\t\t\"status\": {\n\t\t\t\"id\": \"d42bdd79-a9e5-45fe-8e9d-fe1824b0cab6\",\n\t\t\t\"level\": 15,\n\t\t\t\"vigor\": 4,\n\t\t\t\"strength\": 1,\n\t\t\t\"agility\": 2,\n\t\t\t\"magic\": 1,\n\t\t\t\"defense\": 6,\n\t\t\t\"hp\": 40,\n\t\t\t\"points\": 0\n\t\t}\n\t}\n]"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/MissingToken"
+          }
+        }
+      }
+    },
+    "/battle/{battleLevel}": {
+      "get": {
+        "tags": ["Battle"],
+        "summary": "Start Battle",
+        "description": "Start a new battle with user isn't already on a battle",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AdminAccessToken"
+          },
+          {
+            "name": "battleLevel",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "example": 2
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Success": {
+                    "value": "{\n\t\"char\": {\n\t\t\"id\": \"d524193d-4914-4c3d-a57c-c2c3425ff70e\",\n\t\t\"name\": \"Mobidiko4\",\n\t\t\"token\": \"\",\n\t\t\"status\": {\n\t\t\t\"id\": \"89c5220d-22c8-4caf-9d2f-a6fcd0f2b882\",\n\t\t\t\"level\": 15,\n\t\t\t\"vigor\": 4,\n\t\t\t\"strength\": 1,\n\t\t\t\"agility\": 2,\n\t\t\t\"magic\": 1,\n\t\t\t\"defense\": 6,\n\t\t\t\"hp\": 40,\n\t\t\t\"points\": 15\n\t\t},\n\t\t\"attacks\": [\n\t\t\t{\n\t\t\t\t\"id\": \"80dcd263-ad84-45a9-8886-4a32ca486935\",\n\t\t\t\t\"name\": \"Bola de fogo2\",\n\t\t\t\t\"power\": 9,\n\t\t\t\t\"accuracy\": 1,\n\t\t\t\t\"hits\": 1,\n\t\t\t\t\"type\": \"magic\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": \"c2a211ec-acf8-44b2-88d3-75c1965af9fe\",\n\t\t\t\t\"name\": \"Punch loko\",\n\t\t\t\t\"power\": 3,\n\t\t\t\t\"accuracy\": 1,\n\t\t\t\t\"hits\": 8,\n\t\t\t\t\"type\": \"physical\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": \"43c36801-f494-411e-81d2-1af8079645bb\",\n\t\t\t\t\"name\": \"Bola de fogo\",\n\t\t\t\t\"power\": 9,\n\t\t\t\t\"accuracy\": 1,\n\t\t\t\t\"hits\": 1,\n\t\t\t\t\"type\": \"magic\"\n\t\t\t}\n\t\t],\n\t\t\"sprite\": {\n\t\t\t\"id\": \"beae480b-55e4-47a3-bc5a-279a6ff83097\",\n\t\t\t\"name\": \"sword\",\n\t\t\t\"key\": null,\n\t\t\t\"url\": \"https://fundao-game-api.s3.sa-east-1.amazonaws.com/f4fc651a-bc1a-4f59-94d5-210eff22a714-sword.png\"\n\t\t}\n\t},\n\t\"enemy\": {\n\t\t\"id\": \"10b1304d-722b-4cd3-be85-8d43b6da39c4\",\n\t\t\"name\": \"Mobidik\",\n\t\t\"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjaGFyIjp7ImlkIjoiMTBiMTMwNGQtNzIyYi00Y2QzLWJlODUtOGQ0M2I2ZGEzOWM0IiwibmFtZSI6Ik1vYmlkaWsiLCJ0b2tlbiI6IiIsInN0YXR1cyI6eyJpZCI6IjdkYTVhN2Y1LWEwZjEtNDAzMC1hZGM3LTEwZGJiNTVjMWUzOCIsImxldmVsIjoxNSwidmlnb3IiOjQsInN0cmVuZ3RoIjoxLCJhZ2lsaXR5IjoyLCJtYWdpYyI6MSwiZGVmZW5zZSI6NiwiaHAiOjQwLCJwb2ludHMiOjB9LCJhdHRhY2tzIjpbeyJpZCI6IjIxZTQ2ZWE2LTY3MTUtNGJmNC1iNzczLTkzN2IzNWY5MmI5OSIsIm5hbWUiOiJTbWFzaCIsInBvd2VyIjo5LCJhY2N1cmFjeSI6MSwiaGl0cyI6MSwidHlwZSI6InBoeXNpY2FsIn0seyJpZCI6IjU2MjZhZjE4LWU5MDQtNDlmYS1hNmU2LWU1MGQyNDUwMWFkOSIsIm5hbWUiOiJQZXJlcXVlcGVwZSIsInBvd2VyIjoxLCJhY2N1cmFjeSI6OCwiaGl0cyI6MywidHlwZSI6InBoeXNpY2FsIn0seyJpZCI6ImYzMDBmYWVmLWNmYTgtNDIyMC05Zjk0LWUwZDFiNTAwMjM0ZSIsIm5hbWUiOiJQYXBhbGVndWFzIiwicG93ZXIiOjMsImFjY3VyYWN5IjoxLCJoaXRzIjo4LCJ0eXBlIjoibWFnaWMifV0sInNwcml0ZSI6eyJpZCI6ImJlYWU0ODBiLTU1ZTQtNDdhMy1iYzVhLTI3OWE2ZmY4MzA5NyIsIm5hbWUiOiJzd29yZCIsInVybCI6Imh0dHBzOi8vZnVuZGFvLWdhbWUtYXBpLnMzLnNhLWVhc3QtMS5hbWF6b25hd3MuY29tL2Y0ZmM2NTFhLWJjMWEtNGY1OS05NGQ1LTIxMGVmZjIyYTcxNC1zd29yZC5wbmcifX0sImVuZW15Ijp7ImlkIjoiOWFmNzcwMDgtYjllZi00NzA3LWIxZDQtZWI5ZDFhOTgxODVmIiwibmFtZSI6IlrDqSBkbyBDYWl4w6NvIiwidG9rZW4iOm51bGwsInN0YXR1cyI6eyJpZCI6ImI2MDI1MTBiLWRjYzMtNGQxYS1hOTAyLWViOTU2MGQ5OThiNyIsImxldmVsIjoxNSwidmlnb3IiOjQsInN0cmVuZ3RoIjoxLCJhZ2lsaXR5IjoyLCJtYWdpYyI6MSwiZGVmZW5zZSI6NiwiaHAiOjQwLCJwb2ludHMiOjB9LCJhdHRhY2tzIjpbeyJpZCI6IjU2MjZhZjE4LWU5MDQtNDlmYS1hNmU2LWU1MGQyNDUwMWFkOSIsIm5hbWUiOiJQZXJlcXVlcGVwZSIsInBvd2VyIjoxLCJhY2N1cmFjeSI6OCwiaGl0cyI6MywidHlwZSI6InBoeXNpY2FsIn0seyJpZCI6IjIxZTQ2ZWE2LTY3MTUtNGJmNC1iNzczLTkzN2IzNWY5MmI5OSIsIm5hbWUiOiJTbWFzaCIsInBvd2VyIjo5LCJhY2N1cmFjeSI6MSwiaGl0cyI6MSwidHlwZSI6InBoeXNpY2FsIn0seyJpZCI6Ijg4YjM2MTc1LTgyYjItNGYxZC1iY2RlLWJlZWUwZTFhMzBkMSIsIm5hbWUiOiJIaXQgYW5kIGdvIiwicG93ZXIiOjMsImFjY3VyYWN5IjoxLCJoaXRzIjo4LCJ0eXBlIjoicGh5c2ljYWwifV0sInNwcml0ZSI6eyJpZCI6ImFlYzFmNGY4LTYzNDEtNGI0OC1iYWQwLWE5OTE2YmU4OGM0OCIsIm5hbWUiOiJndW4iLCJ1cmwiOiJodHRwczovL2Z1bmRhby1nYW1lLWFwaS5zMy5zYS1lYXN0LTEuYW1hem9uYXdzLmNvbS8zOTRjYzg2YS0wYjRmLTRhYTctODYwMy1mODI0ZjZjNTU5YTktZ3VuLnBuZyJ9fSwiaWF0IjoxNjU1MzMwOTczLCJleHAiOjE2NTU0MTczNzN9.oRpSR5XWk6vnjx7HZjieYzNYDl_tmWkzIbFE1Whny4c\",\n\t\t\"status\": {\n\t\t\t\"id\": \"7da5a7f5-a0f1-4030-adc7-10dbb55c1e38\",\n\t\t\t\"level\": 15,\n\t\t\t\"vigor\": 4,\n\t\t\t\"strength\": 1,\n\t\t\t\"agility\": 2,\n\t\t\t\"magic\": 1,\n\t\t\t\"defense\": 6,\n\t\t\t\"hp\": 40,\n\t\t\t\"points\": 0\n\t\t},\n\t\t\"attacks\": [\n\t\t\t{\n\t\t\t\t\"id\": \"21e46ea6-6715-4bf4-b773-937b35f92b99\",\n\t\t\t\t\"name\": \"Smash\",\n\t\t\t\t\"power\": 9,\n\t\t\t\t\"accuracy\": 1,\n\t\t\t\t\"hits\": 1,\n\t\t\t\t\"type\": \"physical\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": \"5626af18-e904-49fa-a6e6-e50d24501ad9\",\n\t\t\t\t\"name\": \"Perequepepe\",\n\t\t\t\t\"power\": 1,\n\t\t\t\t\"accuracy\": 8,\n\t\t\t\t\"hits\": 3,\n\t\t\t\t\"type\": \"physical\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": \"f300faef-cfa8-4220-9f94-e0d1b500234e\",\n\t\t\t\t\"name\": \"Papaleguas\",\n\t\t\t\t\"power\": 3,\n\t\t\t\t\"accuracy\": 1,\n\t\t\t\t\"hits\": 8,\n\t\t\t\t\"type\": \"magic\"\n\t\t\t}\n\t\t],\n\t\t\"sprite\": {\n\t\t\t\"id\": \"beae480b-55e4-47a3-bc5a-279a6ff83097\",\n\t\t\t\"name\": \"sword\",\n\t\t\t\"key\": null,\n\t\t\t\"url\": \"https://fundao-game-api.s3.sa-east-1.amazonaws.com/f4fc651a-bc1a-4f59-94d5-210eff22a714-sword.png\"\n\t\t}\n\t},\n\t\"iat\": 1655843220,\n\t\"exp\": 1655929620\n}"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/battle": {
+      "post": {
+        "tags": ["Battle"],
+        "summary": "Attack enemy",
+        "description": "When in battle, users can choose one of the char attacks to attack the enemy. <br /> The selected attack must be one of the user char attacks",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/UserAccessToken"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "attackId": {
+                    "type": "string",
+                    "example": "5626af18-e904-49fa-a6e6-e50d24501ad9"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Success": {
+                    "value": "{\n\t\"msg\": {\n\t\t\"char_attack\": \"Mobidiko4 missed Bola de fogo2\",\n\t\t\"enemy_damage\": \"Mobidiko2 took no damage\",\n\t\t\"enemy_atatck\": \"Mobidiko2 used Papaleguas\",\n\t\t\"char_damage\": \"Mobidiko4 take 2 damage\"\n\t},\n\t\"char\": {\n\t\t\"id\": \"d524193d-4914-4c3d-a57c-c2c3425ff70e\",\n\t\t\"name\": \"Mobidiko4\",\n\t\t\"token\": \"\",\n\t\t\"status\": {\n\t\t\t\"id\": \"89c5220d-22c8-4caf-9d2f-a6fcd0f2b882\",\n\t\t\t\"level\": 15,\n\t\t\t\"vigor\": 4,\n\t\t\t\"strength\": 1,\n\t\t\t\"agility\": 2,\n\t\t\t\"magic\": 1,\n\t\t\t\"defense\": 6,\n\t\t\t\"hp\": 38,\n\t\t\t\"points\": 15\n\t\t},\n\t\t\"attacks\": [\n\t\t\t{\n\t\t\t\t\"id\": \"80dcd263-ad84-45a9-8886-4a32ca486935\",\n\t\t\t\t\"name\": \"Bola de fogo2\",\n\t\t\t\t\"power\": 9,\n\t\t\t\t\"accuracy\": 1,\n\t\t\t\t\"hits\": 1,\n\t\t\t\t\"type\": \"magic\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": \"c2a211ec-acf8-44b2-88d3-75c1965af9fe\",\n\t\t\t\t\"name\": \"Punch loko\",\n\t\t\t\t\"power\": 3,\n\t\t\t\t\"accuracy\": 1,\n\t\t\t\t\"hits\": 8,\n\t\t\t\t\"type\": \"physical\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": \"43c36801-f494-411e-81d2-1af8079645bb\",\n\t\t\t\t\"name\": \"Bola de fogo\",\n\t\t\t\t\"power\": 9,\n\t\t\t\t\"accuracy\": 1,\n\t\t\t\t\"hits\": 1,\n\t\t\t\t\"type\": \"magic\"\n\t\t\t}\n\t\t],\n\t\t\"sprite\": {\n\t\t\t\"id\": \"beae480b-55e4-47a3-bc5a-279a6ff83097\",\n\t\t\t\"name\": \"sword\",\n\t\t\t\"key\": null,\n\t\t\t\"url\": \"https://fundao-game-api.s3.sa-east-1.amazonaws.com/f4fc651a-bc1a-4f59-94d5-210eff22a714-sword.png\"\n\t\t}\n\t},\n\t\"enemy\": {\n\t\t\"id\": \"6eeffad3-455f-4969-ae6d-9b9a0134fc23\",\n\t\t\"name\": \"Mobidiko2\",\n\t\t\"token\": null,\n\t\t\"status\": {\n\t\t\t\"id\": \"01372905-d2c5-4d51-b1aa-acf82cae0c32\",\n\t\t\t\"level\": 15,\n\t\t\t\"vigor\": 4,\n\t\t\t\"strength\": 1,\n\t\t\t\"agility\": 2,\n\t\t\t\"magic\": 1,\n\t\t\t\"defense\": 6,\n\t\t\t\"hp\": 40,\n\t\t\t\"points\": 15\n\t\t},\n\t\t\"attacks\": [\n\t\t\t{\n\t\t\t\t\"id\": \"c2a211ec-acf8-44b2-88d3-75c1965af9fe\",\n\t\t\t\t\"name\": \"Punch loko\",\n\t\t\t\t\"power\": 3,\n\t\t\t\t\"accuracy\": 1,\n\t\t\t\t\"hits\": 8,\n\t\t\t\t\"type\": \"physical\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": \"f300faef-cfa8-4220-9f94-e0d1b500234e\",\n\t\t\t\t\"name\": \"Papaleguas\",\n\t\t\t\t\"power\": 3,\n\t\t\t\t\"accuracy\": 1,\n\t\t\t\t\"hits\": 8,\n\t\t\t\t\"type\": \"magic\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": \"5626af18-e904-49fa-a6e6-e50d24501ad9\",\n\t\t\t\t\"name\": \"Perequepepe\",\n\t\t\t\t\"power\": 1,\n\t\t\t\t\"accuracy\": 8,\n\t\t\t\t\"hits\": 3,\n\t\t\t\t\"type\": \"physical\"\n\t\t\t}\n\t\t],\n\t\t\"sprite\": {\n\t\t\t\"id\": \"beae480b-55e4-47a3-bc5a-279a6ff83097\",\n\t\t\t\"name\": \"sword\",\n\t\t\t\"key\": null,\n\t\t\t\"url\": \"https://fundao-game-api.s3.sa-east-1.amazonaws.com/f4fc651a-bc1a-4f59-94d5-210eff22a714-sword.png\"\n\t\t}\n\t}\n}"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/MissingToken"
+          }
+        }
+      }
+    },
+    "/hello": {
+      "get": {
+        "tags": ["Hello"],
+        "summary": "Test Route",
+        "description": "Test route to verify connection errors...",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Success": {
+                    "value": "\"Hello World! Want a churros?\""
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "UserAccessToken": {
+        "name": "Access Token",
+        "in": "header",
+        "required": true,
+        "description": "User access Token",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "AdminAccessToken": {
+        "name": "Access Token",
+        "in": "header",
+        "required": true,
+        "description": "Admin access Token",
+        "schema": {
+          "type": "string"
+        }
+      }
+    },
+    "schemas": {
+      "CreateUser": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "example": "kenzinho"
+          },
+          "email": {
+            "type": "string",
+            "example": "kenzinho@mail.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "strongPassword!"
+          },
+          "adm": {
+            "type": "boolean"
+          }
+        },
+        "required": ["username", "email", "password"]
+      }
+    },
+    "responses": {
+      "MissingToken": {
+        "description": "Not Found",
+        "content": {
+          "application/json": {
+            "examples": {
+              "Missing Authorization Token": {
+                "value": "{\n\t\"error\":\t\t\"Missing authorization token.\"\n}"
+              }
+            }
+          }
+        }
+      },
+      "NeedAdminPermission": {
+        "description": "Unprocessable Entity",
+        "content": {
+          "application/json": {
+            "examples": {
+              "User is not adm": {
+                "value": "{\n\t\"error\":\t\t\"Need admin permission.\"\n}"
+              }
+            }
+          }
+        }
+      },
+      "CreateUserRequiredFields": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "examples": {
+              "Missing username": {
+                "value": "{\n\t\"error\":\t\t\"data must have required property 'username'\"\n}"
+              },
+              "Missing email": {
+                "value": "{\n\t\"error\":\t\t\"data must have required property 'email'\"\n}"
+              },
+              "Missing password": {
+                "value": "{\n\t\"error\":\t\t\"data must have required property 'password'\"\n}"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
