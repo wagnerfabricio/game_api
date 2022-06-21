@@ -4,6 +4,7 @@ import attackService from "./attack.service";
 import spriteService from "./sprite.service";
 import statusService from "./status.service";
 import battleService from "./battle.service";
+import chatService from "./chat.service";
 
 export {
   userService,
@@ -12,4 +13,5 @@ export {
   spriteService,
   statusService,
   battleService,
+  chatService,
 };
