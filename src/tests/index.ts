@@ -69,7 +69,18 @@ const generateChar = () => {
   }
 }
 
+const generateAttack = () => {
+  return {
+    name: faker.random.words(3),
+    power: Number(faker.random.numeric(2)),
+    accuracy: Number(faker.random.numeric(2)),
+    hits: Number(faker.random.numeric(1)),
+    type: ['fisico', 'magico', 'ranged'][Math.floor(Math.random() * 3)],
+  }
+}
+
 export {
+  generateAttack,
   generateChar,
   generateToken,
   generateAdmin,
