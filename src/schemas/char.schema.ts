@@ -40,6 +40,17 @@ class CharSchema {
       "spriteId",
     ],
   };
+  upgradeChar = {
+    type: "object",
+    additionalProperties: false,
+    properties: {
+      status: {
+        type: "string",
+        enum: ["vigor", "strength", "agility", "magic", "defense"],
+      },
+    },
+    required: ["status"],
+  };
 }
 
 export default new CharSchema();

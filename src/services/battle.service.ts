@@ -1,6 +1,6 @@
 import { sign, verify } from "jsonwebtoken";
-import { Char } from "../entities";
-import { charRepository as charRepo } from "../repositories";
+import { Attack, Char } from "../entities";
+import { charRepository as charRepo, statusRepository } from "../repositories";
 import { battleUtil as btu } from "../utils";
 import { Request } from "express";
 import { IFighters } from "../interfaces";
@@ -14,7 +14,7 @@ class BattleService {
       enemy = await charRepo.getRandomChar(enemy_level);
     }
 
-    char.token = "";
+    char.token = null;
     const token: string = sign({ char, enemy }, process.env.SECRET_KEY, {
       expiresIn: process.env.BATTLE_EXPIRES_IN,
     });
@@ -48,19 +48,32 @@ class BattleService {
     };
   };
 
+  winnerDrop = async (fighters: IFighters) => {
+    const { char, enemy } = fighters;
+    const dropAttack = btu.enemyRandomAttack(fighters);
+    if (Math.random() * 100 < 100) {
+      const userChar = await charRepo.retrieve({ id: char.id });
+      userChar.attacks.push(dropAttack);
+      await charRepo.save(userChar);
+      return dropAttack;
+    }
+  };
+
   battle = async ({ body, fighters }: Request) => {
     const { char, enemy } = fighters;
+
     // Char Attack
     const { charAttack, damage } = await this.charAttack(
       body.attackId,
       fighters
     );
+
     // Enemy Attack
     const { enemyAttack, enemyDamage } = await this.enemyAttack(fighters);
 
     // Verify if char is alive
-    // If enemy is faster, char hp will be verified first.
     if (enemy.status.agility > char.status.agility) {
+      // If enemy is faster, char hp will be verified first.
       if (char.status.hp <= 0) {
         await charRepo.update(char.id, { token: null });
         return {
@@ -72,23 +85,38 @@ class BattleService {
         };
       }
       if (enemy.status.hp <= 0) {
-        await charRepo.update(char.id, { token: null });
+        const userChar = await charRepo.retrieve({ id: char.id });
+        //add points and remove token
+        userChar.status.points += 1;
+        userChar.token = null;
+        await charRepo.save(userChar);
+        //verify if enemy drop something
+        const winDrop: Attack = await this.winnerDrop(fighters);
         return {
           msg: {
             char_attack: `${char.name} used ${charAttack.name}`,
             enemy_damage: `${enemy.name} take ${damage} damage and died.`,
-            victory: `${char.name} wins!`,
+            victory: `${char.name} win and now have ${userChar.status.points} status point!`,
+            drop: winDrop ? `${char.name} got a ${winDrop.name}` : null,
           },
         };
       }
     } else {
+      // If char is faster, enemy hp will be verified first.
       if (enemy.status.hp <= 0) {
-        await charRepo.update(char.id, { token: null });
+        const userChar = await charRepo.retrieve({ id: char.id });
+        //add points and remove token
+        userChar.status.points += 1;
+        userChar.token = null;
+        await charRepo.save(userChar);
+        //verify if enemy drop something
+        const winDrop: Attack = await this.winnerDrop(fighters);
         return {
           msg: {
             char_attack: `${char.name} used ${charAttack.name}`,
             enemy_damage: `${enemy.name} take ${damage} damage and died.`,
-            victory: `${char.name} wins!`,
+            victory: `${char.name} win and now have ${userChar.status.points} status point!`,
+            drop: winDrop ? `${char.name} got a ${winDrop.name}` : null,
           },
         };
       }
