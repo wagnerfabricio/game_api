@@ -25,7 +25,7 @@ class CharSchema {
       magic: { type: "integer" },
       defense: { type: "integer" },
       // hp: { type: "integer" },
-      points: { type: "integer" },
+      // points: { type: "integer" },
       spriteId: { type: "string" },
     },
     required: [
@@ -36,7 +36,7 @@ class CharSchema {
       "magic",
       "defense",
       // "hp",
-      "points",
+      // "points",
       "spriteId",
     ],
   };
