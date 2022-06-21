@@ -4,6 +4,7 @@ import attackController from "./attack.controller";
 import spriteController from "./sprite.controller";
 import statusController from "./status.controller";
 import battleController from "./battle.controller";
+import chatController from "./chat.controller";
 
 export {
   userController,
@@ -12,4 +13,5 @@ export {
   spriteController,
   statusController,
   battleController,
+  chatController,
 };
