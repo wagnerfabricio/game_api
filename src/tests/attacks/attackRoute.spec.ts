@@ -41,17 +41,17 @@ describe('All attacks related routes', () => {
       expect(body).toHaveProperty('id')
       expect(validate(body.id)).toBe(true)
     })
-    it('Should fail without token | Status Code: 401', async () => {
+    it('Should fail without token | Status Code: 404', async () => {
       const newAttack = generateAttack()
       const { statusCode, body } = await supertest(app)
         .post('/api/attacks/admin')
         .send({ ...newAttack })
 
-      expect(statusCode).toBe(401)
+      expect(statusCode).toBe(404)
       expect(body).toHaveProperty('error', 'Missing authorization token.')
     })
 
-    it('Should fail without administrative privileges | Status Code: 401', async () => {
+    it('Should fail without administrative privileges | Status Code: 422', async () => {
       const user = generateNotAdmin()
       await userRepository.save({ ...user })
       const token = generateToken(user)
@@ -60,7 +60,7 @@ describe('All attacks related routes', () => {
         .post('/api/attacks/admin')
         .send({ ...newAttack })
         .set('Authorization', 'Bearer ' + token)
-      expect(statusCode).toBe(401)
+      expect(statusCode).toBe(422)
       expect(body).toHaveProperty('error', 'Need admin permission.')
     })
   })
@@ -84,12 +84,12 @@ describe('All attacks related routes', () => {
       expect(body[0]).toHaveProperty('hits')
       expect(body[0]).toHaveProperty('type')
     })
-    it('Should fail without token | Status Code: 401', async () => {
+    it('Should fail without token | Status Code: 404', async () => {
       const newAttack = generateAttack()
       await attackRepository.save({ ...newAttack })
       const { statusCode, body } = await supertest(app).get('/api/attacks')
 
-      expect(statusCode).toBe(401)
+      expect(statusCode).toBe(404)
       expect(body).toHaveProperty('error', 'Missing authorization token.')
     })
   })
