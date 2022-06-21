@@ -14,6 +14,7 @@ class BattleUtils {
     //((for*pow) * (1-((res_mons / 100) + (agi_mons / 1000))))
     let damage = 0;
     let hits = attack.hits;
+
     switch (attack.type) {
       case "physical":
         while (hits) {

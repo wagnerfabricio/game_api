@@ -12,7 +12,7 @@ const verifyAdm = (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
 
   if (user.id != id) {
-    throw new AppError(422, "Need admim permission.");
+    throw new AppError(422, "Need admin permission.");
   }
 
   return next();
