@@ -31,7 +31,7 @@ class BattleUtils {
           console.log(damage, attack.name);
           hits--;
         }
-        return damage;
+        return Math.floor(damage);
       case "magic":
         while (hits) {
           const damageCalc =
@@ -46,7 +46,7 @@ class BattleUtils {
           }
           hits--;
         }
-        return damage;
+        return Math.floor(damage);
       case "ranged":
         while (hits) {
           const damageCalc =
@@ -61,7 +61,7 @@ class BattleUtils {
           }
           hits--;
         }
-        return damage;
+        return Math.floor(damage);
     }
   };
   enemyRandomAttack = ({ enemy }) => {
