@@ -21,7 +21,7 @@ charRoutes.post(
   "",
   verifyToken,
   validateSchema(charSchema.createChar),
-  validadeCreateChar,
+  // validadeCreateChar,
   charController.createUserChar
 );
 charRoutes.get("", verifyToken, charController.getAll);

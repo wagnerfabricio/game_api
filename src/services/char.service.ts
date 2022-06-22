@@ -32,13 +32,13 @@ class CharService {
   createUserChar = async ({ validated, user }: Request) => {
     const {
       name,
-      vigor,
-      strength,
-      agility,
-      magic,
-      defense,
-      // hp,
-      points,
+      // vigor,
+      // strength,
+      // agility,
+      // magic,
+      // defense,
+      // // hp,
+      // points,
       spriteId,
     } = validated as Partial<ICreateUserChar>; //mudado para partial <<<<< Verificar >>>>>
 
@@ -47,13 +47,13 @@ class CharService {
     newChar.name = name;
 
     const newStatus = new Status();
-    newStatus.vigor = vigor;
-    newStatus.strength = strength;
-    newStatus.agility = agility;
-    newStatus.magic = magic;
-    newStatus.defense = defense;
-    newStatus.hp = vigor * 10;
-    newStatus.points = points;
+    // newStatus.vigor = vigor;
+    // newStatus.strength = strength;
+    // newStatus.agility = agility;
+    // newStatus.magic = magic;
+    // newStatus.defense = defense;
+    newStatus.hp = 10;
+    // newStatus.points = points;
 
     newChar.status = newStatus;
 
@@ -102,7 +102,16 @@ class CharService {
           char.status.points -= 1;
           char.status.vigor += 1;
           char.status.hp = char.status.vigor * 10;
-          char.status.level += 1;
+          if (
+            char.status.vigor +
+              char.status.agility +
+              char.status.strength +
+              char.status.magic +
+              char.status.defense >
+            15
+          ) {
+            char.status.level += 1;
+          }
           await charRepository.save(char);
           return {
             msg: `Up to LVL ${
@@ -122,7 +131,16 @@ class CharService {
         if (char.status.points >= 1) {
           char.status.points -= 1;
           char.status.strength += 1;
-          char.status.level += 1;
+          if (
+            char.status.vigor +
+              char.status.agility +
+              char.status.strength +
+              char.status.magic +
+              char.status.defense >
+            15
+          ) {
+            char.status.level += 1;
+          }
           await charRepository.save(char);
           return {
             msg: `Up to LVL ${
@@ -142,7 +160,16 @@ class CharService {
         if (char.status.points >= 1) {
           char.status.points -= 1;
           char.status.agility += 1;
-          char.status.level += 1;
+          if (
+            char.status.vigor +
+              char.status.agility +
+              char.status.strength +
+              char.status.magic +
+              char.status.defense >
+            15
+          ) {
+            char.status.level += 1;
+          }
           await charRepository.save(char);
           return {
             msg: `Up to LVL ${
@@ -162,7 +189,16 @@ class CharService {
         if (char.status.points >= 1) {
           char.status.points -= 1;
           char.status.magic += 1;
-          char.status.level += 1;
+          if (
+            char.status.vigor +
+              char.status.agility +
+              char.status.strength +
+              char.status.magic +
+              char.status.defense >
+            15
+          ) {
+            char.status.level += 1;
+          }
           await charRepository.save(char);
           return {
             msg: `Up to LVL ${
@@ -182,7 +218,16 @@ class CharService {
         if (char.status.points >= 1) {
           char.status.points -= 1;
           char.status.defense += 1;
-          char.status.level += 1;
+          if (
+            char.status.vigor +
+              char.status.agility +
+              char.status.strength +
+              char.status.magic +
+              char.status.defense >
+            15
+          ) {
+            char.status.level += 1;
+          }
           await charRepository.save(char);
           return {
             msg: `Up to LVL ${

@@ -81,7 +81,14 @@ class BattleService {
             enemy_attack: `${enemy.name} used ${enemyAttack.name}`,
             char_damage: `${char.name} take ${enemyDamage} damage and died.`,
             victory: `${enemy.name} wins!`,
+            battleStatus: [
+              `${enemy.name} used ${enemyAttack.name}`,
+              `${char.name} take ${enemyDamage} damage and died.`,
+              `${enemy.name} wins!`,
+            ],
           },
+          char,
+          enemy,
         };
       }
       if (enemy.status.hp <= 0) {
@@ -98,7 +105,15 @@ class BattleService {
             enemy_damage: `${enemy.name} take ${damage} damage and died.`,
             victory: `${char.name} win and now have ${userChar.status.points} status point!`,
             drop: winDrop ? `${char.name} got a ${winDrop.name}` : null,
+            battleStatus: [
+              `${char.name} used ${charAttack.name}`,
+              `${enemy.name} take ${damage} damage and died.`,
+              `${char.name} win and now have ${userChar.status.points} status point!`,
+              winDrop ? `${char.name} got a ${winDrop.name}` : null,
+            ],
           },
+          char,
+          enemy,
         };
       }
     } else {
@@ -117,7 +132,15 @@ class BattleService {
             enemy_damage: `${enemy.name} take ${damage} damage and died.`,
             victory: `${char.name} win and now have ${userChar.status.points} status point!`,
             drop: winDrop ? `${char.name} got a ${winDrop.name}` : null,
+            battleStatus: [
+              `${char.name} used ${charAttack.name}`,
+              `${enemy.name} take ${damage} damage and died.`,
+              `${char.name} win and now have ${userChar.status.points} status point!`,
+              winDrop ? `${char.name} got a ${winDrop.name}` : null,
+            ],
           },
+          char,
+          enemy,
         };
       }
       if (char.status.hp <= 0) {
@@ -127,7 +150,14 @@ class BattleService {
             enemy_attack: `${enemy.name} used ${enemyAttack.name}`,
             char_damage: `${char.name} take ${enemyDamage} damage and died.`,
             victory: `${enemy.name} wins!`,
+            battleStatus: [
+              `${enemy.name} used ${enemyAttack.name}`,
+              `${char.name} take ${enemyDamage} damage and died.`,
+              `${enemy.name} wins!`,
+            ],
           },
+          char,
+          enemy,
         };
       }
     }
@@ -157,6 +187,22 @@ class BattleService {
               damage === 0
                 ? `${enemy.name} took no damage`
                 : `${enemy.name} take ${damage} damage`,
+
+            battleStatus: [
+              `${enemy.name} is faster than ${char.name} and attack first.`,
+              enemyDamage === 0
+                ? `${enemy.name} missed ${enemyAttack.name}`
+                : `${enemy.name} used ${enemyAttack.name}`,
+              enemyDamage === 0
+                ? `${char.name} took no damage`
+                : `${char.name} take ${enemyDamage} damage`,
+              damage === 0
+                ? `${char.name} missed ${charAttack.name}`
+                : `${char.name} used ${charAttack.name}`,
+              damage === 0
+                ? `${enemy.name} took no damage`
+                : `${enemy.name} take ${damage} damage`,
+            ],
           }
         : {
             char_attack:
@@ -175,6 +221,20 @@ class BattleService {
               enemyDamage === 0
                 ? `${char.name} took no damage`
                 : `${char.name} take ${enemyDamage} damage`,
+            battleStatus: [
+              damage === 0
+                ? `${char.name} missed ${charAttack.name}`
+                : `${char.name} used ${charAttack.name}`,
+              damage === 0
+                ? `${enemy.name} took no damage`
+                : `${enemy.name} take ${damage} damage`,
+              enemyDamage === 0
+                ? `${enemy.name} missed ${enemyAttack.name}`
+                : `${enemy.name} used ${enemyAttack.name}`,
+              enemyDamage === 0
+                ? `${char.name} took no damage`
+                : `${char.name} take ${enemyDamage} damage`,
+            ],
           };
 
     return {
