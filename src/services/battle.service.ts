@@ -51,7 +51,7 @@ class BattleService {
   winnerDrop = async (fighters: IFighters) => {
     const { char, enemy } = fighters;
     const dropAttack = btu.enemyRandomAttack(fighters);
-    if (Math.random() * 100 < 100) {
+    if (Math.random() * 100 < enemy.status.level - char.status.level) {
       const userChar = await charRepo.retrieve({ id: char.id });
       userChar.attacks.push(dropAttack);
       await charRepo.save(userChar);
@@ -78,12 +78,13 @@ class BattleService {
         await charRepo.update(char.id, { token: null });
         return {
           msg: {
-            enemy_attack: `${enemy.name} used ${enemyAttack.name}`,
-            char_damage: `${char.name} take ${enemyDamage} damage and died.`,
+            result: "Defeat!",
+            enemy_attack: `${enemy.name} used <strong className="attackName">${enemyAttack.name}</strong>`,
+            char_damage: `${char.name} take <strong className="damage">${enemyDamage}</strong> damage and died.`,
             victory: `${enemy.name} wins!`,
             battleStatus: [
-              `${enemy.name} used ${enemyAttack.name}`,
-              `${char.name} take ${enemyDamage} damage and died.`,
+              `${enemy.name} used <strong className="attackName">${enemyAttack.name}</strong>`,
+              `${char.name} take <strong className="damage">${enemyDamage}</strong> damage and died.`,
               `${enemy.name} wins!`,
             ],
           },
@@ -103,16 +104,17 @@ class BattleService {
         const winDrop: Attack = await this.winnerDrop(fighters);
         return {
           msg: {
-            char_attack: `${char.name} used ${charAttack.name}`,
-            enemy_damage: `${enemy.name} take ${damage} damage and died.`,
+            result: "Victory!",
+            char_attack: `${char.name} used <strong className="attackName">${charAttack.name}</strong>`,
+            enemy_damage: `${enemy.name} take <strong className="damage">${damage}</strong> damage and died.`,
             victory:
               char.status.level <= enemy.status.level
                 ? `${char.name} win and now have ${userChar.status.points} status point!`
                 : `${char.name} win!`,
             drop: winDrop ? `${char.name} got a ${winDrop.name}` : null,
             battleStatus: [
-              `${char.name} used ${charAttack.name}`,
-              `${enemy.name} take ${damage} damage and died.`,
+              `${char.name} used <strong className="attackName">${charAttack.name}</strong>`,
+              `${enemy.name} take <strong className="damage">${damage}</strong> damage and died.`,
               char.status.level >= enemy.status.level
                 ? `${char.name} win and now have ${userChar.status.points} status point!`
                 : `${char.name} win!`,
@@ -137,16 +139,17 @@ class BattleService {
         const winDrop: Attack = await this.winnerDrop(fighters);
         return {
           msg: {
-            char_attack: `${char.name} used ${charAttack.name}`,
-            enemy_damage: `${enemy.name} take ${damage} damage and died.`,
+            result: "Victory!",
+            char_attack: `${char.name} used <strong className="attackName">${charAttack.name}</strong>`,
+            enemy_damage: `${enemy.name} take <strong className="damage">${damage}</strong> damage and died.`,
             victory:
               char.status.level <= enemy.status.level
                 ? `${char.name} win and now have ${userChar.status.points} status point!`
                 : `${char.name} win!`,
             drop: winDrop ? `${char.name} got a ${winDrop.name}` : null,
             battleStatus: [
-              `${char.name} used ${charAttack.name}`,
-              `${enemy.name} take ${damage} damage and died.`,
+              `${char.name} used <strong className="attackName">${charAttack.name}</strong>`,
+              `${enemy.name} take <strong className="damage">${damage}</strong> damage and died.`,
               char.status.level >= enemy.status.level
                 ? `${char.name} win and now have ${userChar.status.points} status point!`
                 : `${char.name} win!`,
@@ -161,12 +164,13 @@ class BattleService {
         await charRepo.update(char.id, { token: null });
         return {
           msg: {
-            enemy_attack: `${enemy.name} used ${enemyAttack.name}`,
-            char_damage: `${char.name} take ${enemyDamage} damage and died.`,
+            result: "Defeat!",
+            enemy_attack: `${enemy.name} used <strong className="attackName">${enemyAttack.name}</strong>`,
+            char_damage: `${char.name} take <strong className="damage">${enemyDamage}</strong> damage and died.`,
             victory: `${enemy.name} wins!`,
             battleStatus: [
-              `${enemy.name} used ${enemyAttack.name}`,
-              `${char.name} take ${enemyDamage} damage and died.`,
+              `${enemy.name} used <strong className="attackName">${enemyAttack.name}</strong>`,
+              `${char.name} take <strong className="damage">${enemyDamage}</strong> damage and died.`,
               `${enemy.name} wins!`,
             ],
           },
@@ -187,67 +191,67 @@ class BattleService {
             first_attack: `${enemy.name} is faster than ${char.name} and attack first.`,
             enemy_atatck:
               enemyDamage === 0
-                ? `${enemy.name} missed ${enemyAttack.name}`
-                : `${enemy.name} used ${enemyAttack.name}`,
+                ? `${enemy.name} missed <strong className="attackName">${enemyAttack.name}</strong>`
+                : `${enemy.name} used <strong className="attackName">${enemyAttack.name}</strong>`,
             char_damage:
               enemyDamage === 0
                 ? `${char.name} took no damage`
-                : `${char.name} take ${enemyDamage} damage`,
+                : `${char.name} take <strong className="damage">${enemyDamage}</strong> damage`,
             char_attack:
               damage === 0
-                ? `${char.name} missed ${charAttack.name}`
-                : `${char.name} used ${charAttack.name}`,
+                ? `${char.name} missed <strong className="attackName">${charAttack.name}</strong>`
+                : `${char.name} used <strong className="attackName">${charAttack.name}</strong>`,
             enemy_damage:
               damage === 0
                 ? `${enemy.name} took no damage`
-                : `${enemy.name} take ${damage} damage`,
+                : `${enemy.name} take <strong className="damage">${damage}</strong> damage`,
 
             battleStatus: [
               `${enemy.name} is faster than ${char.name} and attack first.`,
               enemyDamage === 0
-                ? `${enemy.name} missed ${enemyAttack.name}`
-                : `${enemy.name} used ${enemyAttack.name}`,
+                ? `${enemy.name} missed <strong className="attackName">${enemyAttack.name}</strong>`
+                : `${enemy.name} used <strong className="attackName">${enemyAttack.name}</strong>`,
               enemyDamage === 0
                 ? `${char.name} took no damage`
-                : `${char.name} take ${enemyDamage} damage`,
+                : `${char.name} take <strong className="damage">${enemyDamage}</strong> damage`,
               damage === 0
-                ? `${char.name} missed ${charAttack.name}`
-                : `${char.name} used ${charAttack.name}`,
+                ? `${char.name} missed <strong className="attackName">${charAttack.name}</strong>`
+                : `${char.name} used <strong className="attackName">${charAttack.name}</strong>`,
               damage === 0
                 ? `${enemy.name} took no damage`
-                : `${enemy.name} take ${damage} damage`,
+                : `${enemy.name} take <strong className="damage">${damage}</strong> damage`,
             ],
           }
         : {
             char_attack:
               damage === 0
-                ? `${char.name} missed ${charAttack.name}`
-                : `${char.name} used ${charAttack.name}`,
+                ? `${char.name} missed <strong className="attackName">${charAttack.name}</strong>`
+                : `${char.name} used <strong className="attackName">${charAttack.name}</strong>`,
             enemy_damage:
               damage === 0
                 ? `${enemy.name} took no damage`
-                : `${enemy.name} take ${damage} damage`,
+                : `${enemy.name} take <strong className="damage">${damage}</strong> damage`,
             enemy_atatck:
               enemyDamage === 0
-                ? `${enemy.name} missed ${enemyAttack.name}`
-                : `${enemy.name} used ${enemyAttack.name}`,
+                ? `${enemy.name} missed <strong className="attackName">${enemyAttack.name}</strong>`
+                : `${enemy.name} used <strong className="attackName">${enemyAttack.name}</strong>`,
             char_damage:
               enemyDamage === 0
                 ? `${char.name} took no damage`
-                : `${char.name} take ${enemyDamage} damage`,
+                : `${char.name} take <strong className="damage">${enemyDamage}</strong> damage`,
             battleStatus: [
               damage === 0
-                ? `${char.name} missed ${charAttack.name}`
-                : `${char.name} used ${charAttack.name}`,
+                ? `${char.name} missed <strong className="attackName">${charAttack.name}</strong>`
+                : `${char.name} used <strong className="attackName">${charAttack.name}</strong>`,
               damage === 0
                 ? `${enemy.name} took no damage`
-                : `${enemy.name} take ${damage} damage`,
+                : `${enemy.name} take <strong className="damage">${damage}</strong> damage`,
               enemyDamage === 0
-                ? `${enemy.name} missed ${enemyAttack.name}`
-                : `${enemy.name} used ${enemyAttack.name}`,
+                ? `${enemy.name} missed <strong className="attackName">${enemyAttack.name}</strong>`
+                : `${enemy.name} used <strong className="attackName">${enemyAttack.name}</strong>`,
               enemyDamage === 0
                 ? `${char.name} took no damage`
-                : `${char.name} take ${enemyDamage} damage`,
+                : `${char.name} take <strong className="damage">${enemyDamage}</strong> damage`,
             ],
           };
 
