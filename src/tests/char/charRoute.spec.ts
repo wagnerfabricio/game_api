@@ -39,7 +39,7 @@ describe('Test all character related routes', () => {
       expect(body.attacks).toHaveLength(0)
     })
 
-    it('Should fail to create new character | Status Code: 401', async () => {
+    it('Should fail to create new character | Status Code: 404', async () => {
       const char = generateChar()
       const sprite = await spriteRepository.save({
         url: char.spriteId,
@@ -51,7 +51,7 @@ describe('Test all character related routes', () => {
         .post('/api/chars')
         .send({ ...char })
 
-      expect(statusCode).toBe(401)
+      expect(statusCode).toBe(404)
       expect(body).toHaveProperty('error', 'Missing authorization token.')
     })
   })
