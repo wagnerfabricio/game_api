@@ -94,21 +94,28 @@ class BattleService {
       if (enemy.status.hp <= 0) {
         const userChar = await charRepo.retrieve({ id: char.id });
         //add points and remove token
-        userChar.status.points += 1;
-        userChar.token = null;
-        await charRepo.save(userChar);
+        if (char.status.level <= enemy.status.level) {
+          userChar.status.points += 1;
+          userChar.token = null;
+          await charRepo.save(userChar);
+        }
         //verify if enemy drop something
         const winDrop: Attack = await this.winnerDrop(fighters);
         return {
           msg: {
             char_attack: `${char.name} used ${charAttack.name}`,
             enemy_damage: `${enemy.name} take ${damage} damage and died.`,
-            victory: `${char.name} win and now have ${userChar.status.points} status point!`,
+            victory:
+              char.status.level <= enemy.status.level
+                ? `${char.name} win and now have ${userChar.status.points} status point!`
+                : `${char.name} win!`,
             drop: winDrop ? `${char.name} got a ${winDrop.name}` : null,
             battleStatus: [
               `${char.name} used ${charAttack.name}`,
               `${enemy.name} take ${damage} damage and died.`,
-              `${char.name} win and now have ${userChar.status.points} status point!`,
+              char.status.level >= enemy.status.level
+                ? `${char.name} win and now have ${userChar.status.points} status point!`
+                : `${char.name} win!`,
               winDrop ? `${char.name} got a ${winDrop.name}` : null,
             ],
           },
@@ -121,21 +128,28 @@ class BattleService {
       if (enemy.status.hp <= 0) {
         const userChar = await charRepo.retrieve({ id: char.id });
         //add points and remove token
-        userChar.status.points += 1;
-        userChar.token = null;
-        await charRepo.save(userChar);
+        if (char.status.level <= enemy.status.level) {
+          userChar.status.points += 1;
+          userChar.token = null;
+          await charRepo.save(userChar);
+        }
         //verify if enemy drop something
         const winDrop: Attack = await this.winnerDrop(fighters);
         return {
           msg: {
             char_attack: `${char.name} used ${charAttack.name}`,
             enemy_damage: `${enemy.name} take ${damage} damage and died.`,
-            victory: `${char.name} win and now have ${userChar.status.points} status point!`,
+            victory:
+              char.status.level <= enemy.status.level
+                ? `${char.name} win and now have ${userChar.status.points} status point!`
+                : `${char.name} win!`,
             drop: winDrop ? `${char.name} got a ${winDrop.name}` : null,
             battleStatus: [
               `${char.name} used ${charAttack.name}`,
               `${enemy.name} take ${damage} damage and died.`,
-              `${char.name} win and now have ${userChar.status.points} status point!`,
+              char.status.level >= enemy.status.level
+                ? `${char.name} win and now have ${userChar.status.points} status point!`
+                : `${char.name} win!`,
               winDrop ? `${char.name} got a ${winDrop.name}` : null,
             ],
           },
