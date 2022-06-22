@@ -77,7 +77,7 @@ describe("Create a Sprite", () => {
 
     expect(response.status).toBe(422);
     expect(response.body).toHaveProperty("error");
-    expect(response.body.error).toBe("Need admim permission.");
+    expect(response.body.error).toBe("Need admin permission.");
   });
 
   it("Body error, invalid file format (no file) | Status code: 400", async () => {
