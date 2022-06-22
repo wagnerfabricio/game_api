@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "Game api",
+    "title": "Give The Give - Game api",
     "description": "Super mega ultra turn by turn game api",
     "version": "1.0.1"
   },
@@ -357,7 +357,7 @@
       "post": {
         "tags": ["Chars"],
         "summary": "Create a new Char",
-        "description": "Users can create one char, the total of the status points can't be greater then 15. <br /> Users can't create a new char if already have one. <br /> Necessary a valid spriteId. <br /> Three new attacks will be randomically selected for the new char.",
+        "description": "Users can create one char. <br /> Necessary a valid spriteId. <br /> Three new attacks will be randomically selected for the new char.",
         "parameters": [
           {
             "$ref": "#/components/parameters/UserAccessToken"
@@ -372,26 +372,6 @@
                   "name": {
                     "type": "string",
                     "example": "Mobidik"
-                  },
-                  "vigor": {
-                    "type": "number",
-                    "example": 4
-                  },
-                  "strength": {
-                    "type": "number",
-                    "example": 1
-                  },
-                  "agility": {
-                    "type": "number",
-                    "example": 2
-                  },
-                  "magic": {
-                    "type": "number",
-                    "example": 3
-                  },
-                  "defense": {
-                    "type": "number",
-                    "example": 3
                   },
                   "spriteId": {
                     "type": "string",
@@ -409,7 +389,7 @@
               "application/json": {
                 "examples": {
                   "Success": {
-                    "value": "{\n\t\"name\": \"Mobidiko4\",\n\t\"status\": {\n\t\t\"vigor\": 4,\n\t\t\"strength\": 1,\n\t\t\"agility\": 2,\n\t\t\"magic\": 1,\n\t\t\"defense\": 6,\n\t\t\"hp\": 40,\n\t\t\"points\": 15,\n\t\t\"id\": \"89c5220d-22c8-4caf-9d2f-a6fcd0f2b882\",\n\t\t\"level\": 15\n\t},\n\t\"sprite\": {\n\t\t\"id\": \"beae480b-55e4-47a3-bc5a-279a6ff83097\",\n\t\t\"name\": \"sword\",\n\t\t\"key\": null,\n\t\t\"url\": \"https://fundao-game-api.s3.sa-east-1.amazonaws.com/f4fc651a-bc1a-4f59-94d5-210eff22a714-sword.png\"\n\t},\n\t\"attacks\": [\n\t\t{\n\t\t\t\"id\": \"80dcd263-ad84-45a9-8886-4a32ca486935\",\n\t\t\t\"name\": \"Bola de fogo2\",\n\t\t\t\"power\": 9,\n\t\t\t\"accuracy\": 1,\n\t\t\t\"hits\": 1,\n\t\t\t\"type\": \"magic\"\n\t\t},\n\t\t{\n\t\t\t\"id\": \"c2a211ec-acf8-44b2-88d3-75c1965af9fe\",\n\t\t\t\"name\": \"Punch loko\",\n\t\t\t\"power\": 3,\n\t\t\t\"accuracy\": 1,\n\t\t\t\"hits\": 8,\n\t\t\t\"type\": \"physical\"\n\t\t},\n\t\t{\n\t\t\t\"id\": \"43c36801-f494-411e-81d2-1af8079645bb\",\n\t\t\t\"name\": \"Bola de fogo\",\n\t\t\t\"power\": 9,\n\t\t\t\"accuracy\": 1,\n\t\t\t\"hits\": 1,\n\t\t\t\"type\": \"magic\"\n\t\t}\n\t],\n\t\"token\": null,\n\t\"id\": \"d524193d-4914-4c3d-a57c-c2c3425ff70e\"\n}"
+                    "value": "{\n\t\"name\": \"Mobidiko4\",\n\t\"status\": {\n\t\t\"vigor\": 1,\n\t\t\"strength\": 1,\n\t\t\"agility\": 1,\n\t\t\"magic\": 1,\n\t\t\"defense\": 1,\n\t\t\"hp\": 10,\n\t\t\"points\": 10,\n\t\t\"id\": \"89c5220d-22c8-4caf-9d2f-a6fcd0f2b882\",\n\t\t\"level\": 1\n\t},\n\t\"sprite\": {\n\t\t\"id\": \"beae480b-55e4-47a3-bc5a-279a6ff83097\",\n\t\t\"name\": \"sword\",\n\t\t\"key\": \"f4fc651a-bc1a-4f59-94d5-210eff22a714-sword.png\",\n\t\t\"url\": \"https://fundao-game-api.s3.sa-east-1.amazonaws.com/f4fc651a-bc1a-4f59-94d5-210eff22a714-sword.png\"\n\t},\n\t\"attacks\": [\n\t\t{\n\t\t\t\"id\": \"80dcd263-ad84-45a9-8886-4a32ca486935\",\n\t\t\t\"name\": \"Bola de fogo2\",\n\t\t\t\"power\": 9,\n\t\t\t\"accuracy\": 1,\n\t\t\t\"hits\": 1,\n\t\t\t\"type\": \"magic\"\n\t\t},\n\t\t{\n\t\t\t\"id\": \"c2a211ec-acf8-44b2-88d3-75c1965af9fe\",\n\t\t\t\"name\": \"Punch loko\",\n\t\t\t\"power\": 3,\n\t\t\t\"accuracy\": 1,\n\t\t\t\"hits\": 8,\n\t\t\t\"type\": \"physical\"\n\t\t},\n\t\t{\n\t\t\t\"id\": \"43c36801-f494-411e-81d2-1af8079645bb\",\n\t\t\t\"name\": \"Bola de fogo\",\n\t\t\t\"power\": 9,\n\t\t\t\"accuracy\": 1,\n\t\t\t\"hits\": 1,\n\t\t\t\"type\": \"magic\"\n\t\t}\n\t],\n\t\"token\": null,\n\t\"id\": \"d524193d-4914-4c3d-a57c-c2c3425ff70e\"\n}"
                   }
                 }
               }
@@ -422,21 +402,6 @@
                 "examples": {
                   "Missing name field": {
                     "value": "{\n\t\"error\": \"data must have required property 'name'\"\n}"
-                  },
-                  "Missing vigor field": {
-                    "value": "{\n\t\"error\": \"data must have required property 'vigor'\"\n}"
-                  },
-                  "Missing strength field": {
-                    "value": "{\n\t\"error\": \"data must have required property 'strength'\"\n}"
-                  },
-                  "Missing agility field": {
-                    "value": "{\n\t\"error\": \"data must have required property 'agility'\"\n}"
-                  },
-                  "Missing magic field": {
-                    "value": "{\n\t\"error\": \"data must have required property 'magic'\"\n}"
-                  },
-                  "Missing defense field": {
-                    "value": "{\n\t\"error\": \"data must have required property 'defense'\"\n}"
                   },
                   "Missing spriteId field": {
                     "value": "{\n\t\"error\": \"data must have required property 'spriteId'\"\n}"
@@ -507,6 +472,115 @@
         }
       }
     },
+    "/chars/upgrade": {
+      "post": {
+        "tags": ["Chars"],
+        "summary": "Upgrade char status",
+        "description": "Route to use char points and update a specific ability. <br /> Every post on this route, the ability is **increased by 1 point**. <br /> The update will only occur if the char **have points** to use.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/UserAccessToken"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "example": "vigor"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Upgrade Vigor": {
+                    "value": "{\n\t\"msg\": \"Up to LVL 15! VIGOR upgraded to 5 points!\"\n}"
+                  },
+                  "Upgrade Magic": {
+                    "value": "{\n\t\"msg\": \"Up to LVL 16! MAGIC upgraded to 3 points!\"\n}"
+                  },
+                  "Upgrade Ability": {
+                    "value": "{\n\t\"msg\": \"Up to LVL 17! ABILITY upgraded to 2 points!\"\n}"
+                  },
+                  "Upgrade Strength": {
+                    "value": "{\n\t\"msg\": \"Up to LVL 18! STRENGTH upgraded to 6 points!\"\n}"
+                  },
+                  "Upgrade Defense": {
+                    "value": "{\n\t\"msg\": \"Up to LVL 19! DEFENSE upgraded to 4 points!\"\n}"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Without Points": {
+                    "value": "{\n\t\"error\": \"You don't have enough points to upgrade this attribute\"\n}"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/MissingToken"
+          }
+        }
+      }
+    },
+    "/chars/admin/{charId}": {
+      "patch": {
+        "tags": ["Chars", "Admin"],
+        "summary": "Update char as Admin",
+        "description": "Administrators can edit any char in this route.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AdminAccessToken"
+          },
+          {
+            "name": "charId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "b602510b-dcc3-4d1a-a902-eb9560d998b7"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Success": {
+                    "value": "{\n\t\"name\": \"Bet a Feia\",\n\t\"status\": {\n\t\t\"vigor\": 2,\n\t\t\"strength\": 2,\n\t\t\"agility\": 8,\n\t\t\"magic\": 1,\n\t\t\"defense\": 2,\n\t\t\"hp\": 20,\n\t\t\"points\": 15,\n\t\t\"id\": \"49838069-ec36-4ec3-beb0-3f182c488546\",\n\t\t\"level\": 15\n\t},\n\t\"sprite\": {\n\t\t\"id\": \"e67eb1d0-8bde-44ca-9133-7a768ad11862\",\n\t\t\"name\": \"bet\",\n\t\t\"key\": \"3ec3b0a9-820f-4c4e-927b-c33c1d96cd2a-bet.png\",\n\t\t\"url\": \"https://fundao-game-api.s3.sa-east-1.amazonaws.com/3ec3b0a9-820f-4c4e-927b-c33c1d96cd2a-bet.png\"\n\t},\n\t\"attacks\": [\n\t\t{\n\t\t\t\"id\": \"88b36175-82b2-4f1d-bcde-beee0e1a30d1\",\n\t\t\t\"name\": \"Hit and go\",\n\t\t\t\"power\": 3,\n\t\t\t\"accuracy\": 1,\n\t\t\t\"hits\": 8,\n\t\t\t\"type\": \"physical\"\n\t\t},\n\t\t{\n\t\t\t\"id\": \"0a9bbb04-bb17-4045-8d3d-3f5d5d7f5556\",\n\t\t\t\"name\": \"Hadouken\",\n\t\t\t\"power\": 9,\n\t\t\t\"accuracy\": 3,\n\t\t\t\"hits\": 1,\n\t\t\t\"type\": \"magic\"\n\t\t},\n\t\t{\n\t\t\t\"id\": \"f300faef-cfa8-4220-9f94-e0d1b500234e\",\n\t\t\t\"name\": \"Papaleguas\",\n\t\t\t\"power\": 3,\n\t\t\t\"accuracy\": 1,\n\t\t\t\"hits\": 8,\n\t\t\t\"type\": \"magic\"\n\t\t}\n\t],\n\t\"token\": null,\n\t\"id\": \"f3784c54-a1f6-4605-9243-e4ff10e59b6c\"\n}"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/MissingToken"
+          },
+          "422": {
+            "$ref": "#/components/responses/NeedAdminPermission"
+          }
+        }
+      }
+    },
     "/battle/{battleLevel}": {
       "get": {
         "tags": ["Battle"],
@@ -514,7 +588,7 @@
         "description": "Start a new battle with user isn't already on a battle",
         "parameters": [
           {
-            "$ref": "#/components/parameters/AdminAccessToken"
+            "$ref": "#/components/parameters/UserAccessToken"
           },
           {
             "name": "battleLevel",
@@ -538,6 +612,9 @@
                 }
               }
             }
+          },
+          "404": {
+            "$ref": "#/components/responses/MissingToken"
           }
         }
       }
