@@ -8,24 +8,24 @@ export class Status {
   @Column({ default: 1 })
   level: number;
 
-  @Column()
+  @Column({ default: 1 })
   vigor: number;
 
-  @Column()
+  @Column({ default: 1 })
   strength: number;
 
-  @Column()
+  @Column({ default: 1 })
   agility: number;
 
-  @Column()
+  @Column({ default: 1 })
   magic: number;
 
-  @Column()
+  @Column({ default: 1 })
   defense: number;
 
   @Column()
   hp: number;
 
-  @Column({ default: 15 })
+  @Column({ default: 10 })
   points: number;
 }
