@@ -97,9 +97,9 @@ class BattleService {
         //add points and remove token
         if (char.status.level <= enemy.status.level) {
           userChar.status.points += 1;
-          userChar.token = null;
-          await charRepo.save(userChar);
         }
+        userChar.token = null;
+        await charRepo.save(userChar);
         //verify if enemy drop something
         const winDrop: Attack = await this.winnerDrop(fighters);
         return {
@@ -115,7 +115,7 @@ class BattleService {
             battleStatus: [
               `${char.name} used <strong className="attackName">${charAttack.name}</strong>`,
               `${enemy.name} take <strong className="damage">${damage}</strong> damage and died.`,
-              char.status.level >= enemy.status.level
+              char.status.level <= enemy.status.level
                 ? `${char.name} win and now have ${userChar.status.points} status point!`
                 : `${char.name} win!`,
               winDrop ? `${char.name} got a ${winDrop.name}` : null,
@@ -132,9 +132,9 @@ class BattleService {
         //add points and remove token
         if (char.status.level <= enemy.status.level) {
           userChar.status.points += 1;
-          userChar.token = null;
-          await charRepo.save(userChar);
         }
+        userChar.token = null;
+        await charRepo.save(userChar);
         //verify if enemy drop something
         const winDrop: Attack = await this.winnerDrop(fighters);
         return {
@@ -150,7 +150,7 @@ class BattleService {
             battleStatus: [
               `${char.name} used <strong className="attackName">${charAttack.name}</strong>`,
               `${enemy.name} take <strong className="damage">${damage}</strong> damage and died.`,
-              char.status.level >= enemy.status.level
+              char.status.level <= enemy.status.level
                 ? `${char.name} win and now have ${userChar.status.points} status point!`
                 : `${char.name} win!`,
               winDrop ? `${char.name} got a ${winDrop.name}` : null,
